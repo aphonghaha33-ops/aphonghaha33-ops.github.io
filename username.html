@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@NGUOITAIKHONGDOANHTHU3</title>
+    <title>Tham Khảo - Kho Câu Chuyện</title>
     <style>
         * {
             margin: 0;
@@ -11,320 +11,754 @@
             box-sizing: border-box;
         }
 
+        @keyframes bgGradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
         body {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(45deg, #1a1a1a, #2d2d2d, #1a1a1a);
             background-size: 300% 300%;
             animation: bgGradient 8s ease infinite;
-            overflow: hidden;
-        }
-
-        @keyframes bgGradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #fff;
         }
 
         .container {
-            text-align: center;
-            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
             position: relative;
             z-index: 1;
         }
 
-        .username-wrapper {
-            position: relative;
-            display: inline-block;
-        }
-
-        .username-text {
-            font-size: 56px;
-            font-weight: 900;
-            letter-spacing: 6px;
-            margin: 0;
-            padding: 30px 40px;
-            background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000);
-            background-size: 200% 100%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: colorShift 3s linear infinite;
-            filter: drop-shadow(0 0 25px rgba(255, 0, 0, 0.8)) drop-shadow(0 0 50px rgba(0, 0, 255, 0.6));
-            text-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
-            line-height: 1.2;
-        }
-
-        @keyframes colorShift {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 200% 0%; }
-        }
-
-        .username-shadow {
-            position: absolute;
-            top: 30px;
-            left: 40px;
-            font-size: 56px;
-            font-weight: 900;
-            letter-spacing: 6px;
-            color: rgba(255, 0, 0, 0.3);
-            animation: shadowPulse 2s ease-in-out infinite;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        @keyframes shadowPulse {
-            0%, 100% { text-shadow: 0 0 15px rgba(255, 0, 0, 1), 0 0 30px rgba(0, 0, 255, 0.8), 0 0 45px rgba(255, 0, 0, 0.6); }
-            50% { text-shadow: 0 0 30px rgba(0, 0, 255, 1), 0 0 60px rgba(255, 0, 0, 0.8), 0 0 90px rgba(0, 0, 255, 0.6); }
-        }
-
-        .subtitle {
-            font-size: 24px;
-            color: #fff;
-            margin-top: 40px;
-            letter-spacing: 3px;
-            font-weight: 300;
-            animation: fadeInOut 2.5s ease-in-out infinite;
-        }
-
-        @keyframes fadeInOut {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        .glow-line {
-            width: 300px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #ff0000, #00ff00, #0000ff, transparent);
-            margin: 30px auto;
-            animation: glowMove 2.5s ease-in-out infinite;
-            border-radius: 10px;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 1), 0 0 60px rgba(0, 0, 255, 0.8);
-        }
-
-        @keyframes glowMove {
-            0%, 100% { width: 300px; opacity: 0.5; }
-            50% { width: 400px; opacity: 1; }
-        }
-
-        .stars {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
+        .header {
             background: white;
-            border-radius: 50%;
-            animation: twinkle 3s ease-in-out infinite;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-
-        .info-box {
-            margin-top: 60px;
-            padding: 30px 40px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 0, 0, 0.3);
+            padding: 40px;
             border-radius: 15px;
-            backdrop-filter: blur(10px);
-            animation: borderGlow 2s ease-in-out infinite;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            margin-bottom: 40px;
+            text-align: center;
         }
 
-        @keyframes borderGlow {
-            0%, 100% { box-shadow: 0 0 30px rgba(255, 0, 0, 0.5), inset 0 0 20px rgba(255, 0, 0, 0.2); }
-            50% { box-shadow: 0 0 50px rgba(255, 0, 0, 0.8), inset 0 0 25px rgba(255, 0, 0, 0.3); }
-        }
-
-        .info-box p {
-            color: #fff;
-            font-size: 17px;
-            margin: 10px 0;
-            letter-spacing: 2px;
-        }
-
-        .info-box strong {
-            color: #00ff00;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
-        }
-
-        .contact-section {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 2px solid rgba(0, 255, 255, 0.3);
-        }
-
-        .contact-title {
-            font-size: 20px;
-            color: #00ffff;
+        .header h1 {
+            font-size: 48px;
+            color: #0d1a3f;
             margin-bottom: 15px;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
-            letter-spacing: 2px;
+            font-weight: 700;
         }
 
-        .telegram-link {
-            display: inline-block;
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #0088cc, #00d4ff);
-            color: white;
-            text-decoration: none;
-            border-radius: 25px;
+        .header p {
             font-size: 18px;
-            font-weight: 600;
-            margin: 10px;
-            transition: all 0.3s;
-            box-shadow: 0 0 20px rgba(0, 136, 204, 0.5);
+            color: #444;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            color: #2a5298;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #999;
+            text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .telegram-link:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 40px rgba(0, 212, 255, 0.8);
-            background: linear-gradient(135deg, #00d4ff, #0088cc);
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
         }
 
-        .action-button {
+        .sidebar {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .sidebar h2 {
+            font-size: 20px;
+            color: #1e3c72;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #2a5298;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        .category-list {
+            list-style: none;
+        }
+
+        .category-list li {
+            margin-bottom: 12px;
+        }
+
+        .category-list a {
+            display: block;
+            padding: 12px 15px;
+            background: #f8f8f8;
+            color: #333;
+            text-decoration: none;
+            border-radius: 6px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .category-list a:hover {
+            background: #2a5298;
+            color: white;
+            border-left-color: #fff;
+            transform: translateX(5px);
+        }
+
+        .main-content {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .story-item {
+            margin-bottom: 40px;
+            padding-bottom: 34px;
+            border-bottom: 2px solid #f0f0f0;
+            transition: transform 0.28s ease, box-shadow 0.28s ease, background-color 0.28s ease;
+        }
+
+        .story-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .story-number {
             display: inline-block;
-            margin-top: 25px;
-            padding: 16px 45px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+            color: white;
+            text-align: center;
+            line-height: 40px;
+            border-radius: 50%;
+            font-weight: 700;
+            margin-right: 15px;
+            font-size: 16px;
+        }
+
+        .story-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+        }
+
+        .story-title {
+            font-size: 20px;
+            color: #0d1a3f;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 0.3px;
+        }
+
+        .story-preview {
+            margin-left: 55px;
+            font-size: 16px;
+            color: #555;
+            line-height: 1.85;
+            padding: 18px 18px;
+            background: #f8f9fa;
+            border-left: 4px solid #2a5298;
+            border-radius: 6px;
+        }
+
+        .story-preview strong {
+            color: #1e3c72;
+        }
+
+        .view-full-btn {
+            display: inline-block;
+            margin-left: 55px;
+            margin-top: 12px;
+            padding: 10px 22px;
+            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
+            background-size: 200% 100%;
             color: white;
             text-decoration: none;
-            border-radius: 30px;
-            font-size: 18px;
+            border-radius: 8px;
+            font-size: 14px;
             font-weight: 700;
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s;
-            box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
-            letter-spacing: 1.5px;
-            position: relative;
-            overflow: hidden;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, background-position 0.6s ease;
         }
 
-        .action-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
+        .view-full-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(42, 82, 152, 0.28);
+            background-position: 100% 0;
         }
 
-        .action-button:hover::before {
-            left: 100%;
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+            padding: 20px;
         }
 
-        .action-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 40px rgba(102, 126, 234, 0.8);
-            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
         }
 
-        .pulse-dot {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            background: #00ff00;
-            border-radius: 50%;
-            margin-right: 10px;
-            animation: pulse 1.5s ease-in-out infinite;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.5); opacity: 0.5; }
-        }
-
-        .floating-element {
-            position: fixed;
-            font-size: 60px;
-            opacity: 0.1;
-            animation: float 6s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        .float1 { top: 10%; left: 5%; animation-delay: 0s; }
-        .float2 { top: 60%; right: 5%; animation-delay: 2s; }
-        .float3 { bottom: 10%; left: 10%; animation-delay: 4s; }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
-        }
+        @keyframes twinkle { 0%,100%{ opacity:0.3 } 50%{ opacity:1 } }
+        .stars{ position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; overflow:hidden; pointer-events: none; }
+        .star{ pointer-events: none }
+        .star{ position:absolute; width:2px; height:2px; background:#fff; border-radius:50%; animation:twinkle 3s ease-in-out infinite }
+        .floating-element{ position:fixed; font-size:60px; opacity:0.08; pointer-events:none; z-index:0; animation:float 6s ease-in-out infinite }
+        .float1{ top:10%; left:5%; animation-delay:0s }
+        .float2{ top:60%; right:5%; animation-delay:2s }
+        .float3{ bottom:10%; left:10%; animation-delay:4s }
+        @keyframes float { 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-20px) } }
 
         @media (max-width: 768px) {
-            .action-button {
-                font-size: 16px;
-                padding: 14px 35px;
-                margin-top: 20px;
+            .header {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .story-preview {
+                margin-left: 0;
+            }
+
+            .view-full-btn {
+                margin-left: 0;
             }
         }
     </style>
 </head>
 <body>
     <div class="stars" id="starsContainer"></div>
-
     <div class="floating-element float1">✨</div>
     <div class="floating-element float2">🌟</div>
     <div class="floating-element float3">💫</div>
-
     <div class="container">
-        <div class="username-wrapper">
-            <div class="username-shadow">@NGUOITAIKHONGDOANHTHU3</div>
-            <h1 class="username-text">@NGUOITAIKHONGDOANHTHU3</h1>
+        <div class="header">
+            <h1>NGUOITAIKHONGDOANHTHU3</h1>
+            <p>Nỗ lực cũng bằng thừa</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">47</div>
+                    <div class="stat-label">Câu Chuyện</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">📖</div>
+                    <div class="stat-label">Danh Mục</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">✨</div>
+                    <div class="stat-label">Chất Lượng</div>
+                </div>
+            </div>
         </div>
 
-        <div class="glow-line"></div>
-
-        <p class="subtitle">✦ CHÀO MỪNG ✦</p>
-
-        <div class="info-box">
-            <p><span class="pulse-dot"></span>Tài Khoản Đặc Biệt</p>
-            <p><strong>Status:</strong> <span style="color: #00ff00;">🟢 Active</span></p>
-            <p><strong>Premium Member:</strong> ✓ Kích Hoạt</p>
-            <p style="margin-top: 15px; font-size: 16px; color: #888;">
-                Tài khoản này là biểu tượng của sự tài ba và đột phá
-            </p>
-
-            <div class="contact-section">
-                <p class="contact-title">📱 Liên Hệ Telegram</p>
-                <a href="https://t.me/NGUOITAIKHONGDOANHTHU3" target="_blank" class="telegram-link">
-                    ✈️ Telegram: @NGUOITAIKHONGDOANHTHU3
-                </a>
-                <p style="margin-top: 15px; font-size: 14px; color: #0088cc;">
-                    Nhấn để mở cuộc trò chuyện trên Telegram
-                </p>
-
-                <button class="action-button" onclick="openActionPage()">
-                    🚀 Bấm Vào Đây
-                </button>
-                <p style="margin-top: 8px; font-size: 13px; color: #aaa; letter-spacing: 1px;">
-                    Mở Đầu Óc Chữ Màu Đẹp ✨
-                </p>
+        <div class="content-wrapper">
+            <div class="sidebar">
+                <h2>🔍 Danh Sách</h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Tìm kiếm câu chuyện...">
+                </div>
+                <ul class="category-list" id="storyList">                    <li><a href="#story-1" onclick="highlightStory(1)">39 câu chuyện thường ngày</a></li>
+                    <li><a href="#story-2" onclick="highlightStory(2)">Ai cũng mưu cầu hạnh phúc</a></li>
+                    <li><a href="#story-3" onclick="highlightStory(3)">Bản thân stress</a></li>
+                    <li><a href="#story-4" onclick="highlightStory(4)">bữa ăn cùng nhân viên</a></li>
+                    <li><a href="#story-5" onclick="highlightStory(5)">Cầu lông</a></li>
+                    <li><a href="#story-6" onclick="highlightStory(6)">Cha tốt hiếu thảo</a></li>
+                    <li><a href="#story-7" onclick="highlightStory(7)">chào hẹn hò</a></li>
+                    <li><a href="#story-8" onclick="highlightStory(8)">Có khách hàng</a></li>
+                    <li><a href="#story-9" onclick="highlightStory(9)">Con bị cô giáo gọi điện</a></li>
+                    <li><a href="#story-10" onclick="highlightStory(10)">Con buồn</a></li>
+                    <li><a href="#story-11" onclick="highlightStory(11)">Con ốm</a></li>
+                    <li><a href="#story-12" onclick="highlightStory(12)">ĐA DẠNG HÓA NGUỒN THU</a></li>
+                    <li><a href="#story-13" onclick="highlightStory(13)">Đào tạo quản lý</a></li>
+                    <li><a href="#story-14" onclick="highlightStory(14)">Đau răng</a></li>
+                    <li><a href="#story-15" onclick="highlightStory(15)">Đầu tư 1</a></li>
+                    <li><a href="#story-16" onclick="highlightStory(16)">Đầu tư 2</a></li>
+                    <li><a href="#story-17" onclick="highlightStory(17)">Đưa con đi chơi</a></li>
+                    <li><a href="#story-18" onclick="highlightStory(18)">Em tự ti quá</a></li>
+                    <li><a href="#story-19" onclick="highlightStory(19)">Giúp đỡ hàng xóm</a></li>
+                    <li><a href="#story-20" onclick="highlightStory(20)">HỎi THĂM MẸ VỢ</a></li>
+                    <li><a href="#story-21" onclick="highlightStory(21)">KỈ LUẬT BẢN THÂN</a></li>
+                    <li><a href="#story-22" onclick="highlightStory(22)">Kiếm tiền 2</a></li>
+                    <li><a href="#story-23" onclick="highlightStory(23)">Kiếm tiền</a></li>
+                    <li><a href="#story-24" onclick="highlightStory(24)">Kiểm tra hợp đồng</a></li>
+                    <li><a href="#story-25" onclick="highlightStory(25)">Lắp đặt hệ thống</a></li>
+                    <li><a href="#story-26" onclick="highlightStory(26)">Năng lực 1</a></li>
+                    <li><a href="#story-27" onclick="highlightStory(27)">Năng lực 2</a></li>
+                    <li><a href="#story-28" onclick="highlightStory(28)">nhân viên cũ</a></li>
+                    <li><a href="#story-29" onclick="highlightStory(29)">nhân viên quà quê</a></li>
+                    <li><a href="#story-30" onclick="highlightStory(30)">Ở lại cùng nhân viên</a></li>
+                    <li><a href="#story-31" onclick="highlightStory(31)">Phần mềm hỏng</a></li>
+                    <li><a href="#story-32" onclick="highlightStory(32)">Phụ nữ li hôn</a></li>
+                    <li><a href="#story-33" onclick="highlightStory(33)">PHỤ NỮ TỰ CHỦ</a></li>
+                    <li><a href="#story-34" onclick="highlightStory(34)">Rộng lượng</a></li>
+                    <li><a href="#story-35" onclick="highlightStory(35)">SÁCH RICH DAD</a></li>
+                    <li><a href="#story-36" onclick="highlightStory(36)">Sau này</a></li>
+                    <li><a href="#story-37" onclick="highlightStory(37)">Sự cố photto shop</a></li>
+                    <li><a href="#story-38" onclick="highlightStory(38)">Tập thể dục</a></li>
+                    <li><a href="#story-39" onclick="highlightStory(39)">Tình yêu là gì</a></li>
+                    <li><a href="#story-40" onclick="highlightStory(40)">TỔNG KẾT QUỸ PHÚC LỢI</a></li>
+                    <li><a href="#story-41" onclick="highlightStory(41)">trải qua</a></li>
+                    <li><a href="#story-42" onclick="highlightStory(42)">TỪ THIỆN</a></li>
+                    <li><a href="#story-43" onclick="highlightStory(43)">Tuấn vay 200 triệu</a></li>
+                    <li><a href="#story-44" onclick="highlightStory(44)">Ứng lương 3 lần</a></li>
+                    <li><a href="#story-45" onclick="highlightStory(45)">Uống rượu với khách hàng</a></li>
+                    <li><a href="#story-46" onclick="highlightStory(46)">VẤN ĐỀ HÔN NHÂN</a></li>
+                    <li><a href="#story-47" onclick="highlightStory(47)">vươn lên chính mình</a></li>
+                </ul>
             </div>
+
+            <div class="main-content">                <div class="story-item" id="story-1">
+                    <div class="story-header">
+                        <div class="story-number">1</div>
+                        <h3 class="story-title">39 câu chuyện thường ngày</h3>
+                    </div>
+                    <div class="story-preview">Ok em, anh đã chỉnh toàn bộ thành “công ty” và bỏ hết chữ xưởng gỗ / văn phòng. Giữ nguyên xưng anh – em và nội dung cốt lõi, chỉ đổi các chỗ liên qua...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-2">
+                    <div class="story-header">
+                        <div class="story-number">2</div>
+                        <h3 class="story-title">Ai cũng mưu cầu hạnh phúc</h3>
+                    </div>
+                    <div class="story-preview">Ai cũng có quyền mưu cầu hạnh phúc  Lầm lỡ thì đã sao, chắc hẳn phải có điều gì đó khuất tất mới bỏ chồng  Hẳn là có nỗi khổ riêng nên mới quyết định ...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-3">
+                    <div class="story-header">
+                        <div class="story-number">3</div>
+                        <h3 class="story-title">Bản thân stress</h3>
+                    </div>
+                    <div class="story-preview">Ở Sài Gòn… đôi khi người ta cứ ngỡ lúc nào cũng nhộn nhịp, nhưng thật ra lại có những góc rất yên. Hồi còn làm việc căng thẳng, nhiều lúc anh không bi...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-4">
+                    <div class="story-header">
+                        <div class="story-number">4</div>
+                        <h3 class="story-title">bữa ăn cùng nhân viên</h3>
+                    </div>
+                    <div class="story-preview">BỮA ĂN CÙNG NHÂN VIÊN   Mấy hôm nay công việc của anh bận quá, không thể để ý, kiểm soát hết mọi việc trong công ty  Anh nghe nhân viên văn phòng bảo ...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-5">
+                    <div class="story-header">
+                        <div class="story-number">5</div>
+                        <h3 class="story-title">Cầu lông</h3>
+                    </div>
+                    <div class="story-preview">Đi chơi cầu lông  Anh đang đi chơi cầu lông em à  Hầu như ngày nào anh cũng chơi thể thao hết, trước anh có đá bóng nữa nhưng giờ cũng có tuổi rồi. Nê...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-6">
+                    <div class="story-header">
+                        <div class="story-number">6</div>
+                        <h3 class="story-title">Cha tốt hiếu thảo</h3>
+                    </div>
+                    <div class="story-preview">Hôm nay trên đường về thăm nhà, gần tới nơi anh thấy một quán vịt quay có nhiều người đứng chờ mua  Anh đoán chắc vịt ngon nên tấp xe vào, chờ mua 2 c...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-7">
+                    <div class="story-header">
+                        <div class="story-number">7</div>
+                        <h3 class="story-title">chào hẹn hò</h3>
+                    </div>
+                    <div class="story-preview">Chị nói em ở Sài Gòn nhận gia sư, có lớp dạy riêng đi làm nghiêm túc ở nhà sống với bố mẹ thích thể thao, hay đánh cầu lông đúng không?  Nhưng chị Lan...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-8">
+                    <div class="story-header">
+                        <div class="story-number">8</div>
+                        <h3 class="story-title">Có khách hàng</h3>
+                    </div>
+                    <div class="story-preview">Hôm nay, anh may mắn có thêm một khách hàng mới nhờ người bạn quen trong buổi giao lưu cầu lông giới thiệu  Anh tên Hoàng một người rất thân thiện, vu...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-9">
+                    <div class="story-header">
+                        <div class="story-number">9</div>
+                        <h3 class="story-title">Con bị cô giáo gọi điện</h3>
+                    </div>
+                    <div class="story-preview">Hôm nay cô giáo gọi cho bà nội bảo con anh nay trên trương hư lắm em à. dám đánh nhau với bạn cùng lớp...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-10">
+                    <div class="story-header">
+                        <div class="story-number">10</div>
+                        <h3 class="story-title">Con buồn</h3>
+                    </div>
+                    <div class="story-preview">Đứa trẻ nhà anh hôm nay được bà đưa đi học. lúc đến trường con thấy một gia đình cũng đang đưa con mình đến trường...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-11">
+                    <div class="story-header">
+                        <div class="story-number">11</div>
+                        <h3 class="story-title">Con ốm</h3>
+                    </div>
+                    <div class="story-preview">Hôm nay con anh bị bệnh chắc là đi ra đường không đội nón áo khoác các thứ vào. Rồi cảm vặt con anh hay cảm vặt lắm đề kháng không tốt nên ra đường mà...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-12">
+                    <div class="story-header">
+                        <div class="story-number">12</div>
+                        <h3 class="story-title">ĐA DẠNG HÓA NGUỒN THU</h3>
+                    </div>
+                    <div class="story-preview">ĐA DẠNG HÓA THU NHẬP - NHIỀU ĐẦU THU   Đa dạng hóa nguồn thu nhập là một trong những điều rất quan trọng để kiểm soát tài chính tốt hơn. Sẽ rất rủi ro...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-13">
+                    <div class="story-header">
+                        <div class="story-number">13</div>
+                        <h3 class="story-title">Đào tạo quản lý</h3>
+                    </div>
+                    <div class="story-preview">1. Hiện tại, anh cũng đang đào tạo một người để sau này làm giám đốc nhà máy của SunGroup...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-14">
+                    <div class="story-header">
+                        <div class="story-number">14</div>
+                        <h3 class="story-title">Đau răng</h3>
+                    </div>
+                    <div class="story-preview">Dạo gần đây anh thức đêm nhiều quá. Sáng nay khi đánh răng, anh bị chảy máu lợi...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-15">
+                    <div class="story-header">
+                        <div class="story-number">15</div>
+                        <h3 class="story-title">Đầu tư 1</h3>
+                    </div>
+                    <div class="story-preview">Chiều nay anh sẽ đi thăm công ty của anh bạn Một lát nữa, anh sẽ qua công ty ông em một chuyến. Ông em gọi anh đến để lấy tiền số tiền em mượn trước đ...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-16">
+                    <div class="story-header">
+                        <div class="story-number">16</div>
+                        <h3 class="story-title">Đầu tư 2</h3>
+                    </div>
+                    <div class="story-preview">2. Vừa tiễn xong gia đình em họ ra về Vào dịp Tết năm ngoái, em họ anh có nói với anh rằng công việc trong cơ quan nhà nước lương thấp quá, không đủ đ...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-17">
+                    <div class="story-header">
+                        <div class="story-number">17</div>
+                        <h3 class="story-title">Đưa con đi chơi</h3>
+                    </div>
+                    <div class="story-preview">Anh đang đưa con trai đi chơi cứ hôm nào được nghỉ là cu cậu lại thích bố đưa đi nhà sách và siêu thị để chơi  Con chỉ thích mua chuyện và đồ dùng học...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-18">
+                    <div class="story-header">
+                        <div class="story-number">18</div>
+                        <h3 class="story-title">Em tự ti quá</h3>
+                    </div>
+                    <div class="story-preview">Em à   Anh thấy em tự ti về bản thân em nhiều quá  Anh nói thật vẽ bên ngoài đâu thật sự là quan trọng đâu em   Quan trọng là con người tính cách của ...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-19">
+                    <div class="story-header">
+                        <div class="story-number">19</div>
+                        <h3 class="story-title">Giúp đỡ hàng xóm</h3>
+                    </div>
+                    <div class="story-preview">Vừa mới về từ bệnh viện. Lúc nãy có người đập cửa nhà anh, làm anh giật mình...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-20">
+                    <div class="story-header">
+                        <div class="story-number">20</div>
+                        <h3 class="story-title">HỎi THĂM MẸ VỢ</h3>
+                    </div>
+                    <div class="story-preview">...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-21">
+                    <div class="story-header">
+                        <div class="story-number">21</div>
+                        <h3 class="story-title">KỈ LUẬT BẢN THÂN</h3>
+                    </div>
+                    <div class="story-preview">...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-22">
+                    <div class="story-header">
+                        <div class="story-number">22</div>
+                        <h3 class="story-title">Kiếm tiền 2</h3>
+                    </div>
+                    <div class="story-preview">Bạn vay tiền để chữa bệnh cho con gái Ôi… đôi khi con người thật kỳ lạ. Phải đợi đến khi sự việc xảy ra rồi mới nhận ra những gì người khác nói là đún...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-23">
+                    <div class="story-header">
+                        <div class="story-number">23</div>
+                        <h3 class="story-title">Kiếm tiền</h3>
+                    </div>
+                    <div class="story-preview">Biến cố bất ngờ trong gia đình nhân viên giúp em nhận ra tầm quan trọng của tiền bạc Vào lúc 1 giờ sáng hôm qua, anh nhận được một cuộc gọi từ em Nam,...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-24">
+                    <div class="story-header">
+                        <div class="story-number">24</div>
+                        <h3 class="story-title">Kiểm tra hợp đồng</h3>
+                    </div>
+                    <div class="story-preview">Hôm nay, khi tôi đang ở văn phòng để kiểm tra lại một số hợp đồng quan trọng với khách hàng. Bất ngờ có nhân viên chạy vào báo tin: một bạn trong đội ...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-25">
+                    <div class="story-header">
+                        <div class="story-number">25</div>
+                        <h3 class="story-title">Lắp đặt hệ thống</h3>
+                    </div>
+                    <div class="story-preview">Sáng hôm qua, tôi cùng Ban điều hành đã họp và quyết định đầu tư nâng cấp hệ thống phòng cháy chữa cháy cho toàn bộ khu vực văn phòng Sun Group. Đây l...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-26">
+                    <div class="story-header">
+                        <div class="story-number">26</div>
+                        <h3 class="story-title">Năng lực 1</h3>
+                    </div>
+                    <div class="story-preview">Hôm nay gặp một người bạn suýt đóng cửa công ty vì kinh doanh không thuận lợi, tôi đã phân tích vấn đề và tìm ra giải pháp giúp anh ấy Chiều nay, anh ...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-27">
+                    <div class="story-header">
+                        <div class="story-number">27</div>
+                        <h3 class="story-title">Năng lực 2</h3>
+                    </div>
+                    <div class="story-preview">Sáng nay, anh có cuộc họp với đội ngũ quản lý Anh hỏi mọi người mở một công ty cần những gì?” Các em trả lời: “Cần quản lý, tài chính, hậu cần, bảo vệ...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-28">
+                    <div class="story-header">
+                        <div class="story-number">28</div>
+                        <h3 class="story-title">nhân viên cũ</h3>
+                    </div>
+                    <div class="story-preview">NHÂN VIÊN CŨ TỚI NHÀ CHƠI   Hôm nay, tôi có một người bạn cũ ghé chơi, mang theo chút trà quê biếu. Ngồi uống trà, bao kỷ niệm ùa về khiến tôi thật sự...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-29">
+                    <div class="story-header">
+                        <div class="story-number">29</div>
+                        <h3 class="story-title">nhân viên quà quê</h3>
+                    </div>
+                    <div class="story-preview">NHÂN VIÊN MANG QUÀ QUÊ   Hôm nay đến công ty, tôi bất ngờ khi nhận được rất nhiều quà quê từ anh em đồng nghiệp. Toàn những món dân dã tôi yêu thích: ...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-30">
+                    <div class="story-header">
+                        <div class="story-number">30</div>
+                        <h3 class="story-title">Ở lại cùng nhân viên</h3>
+                    </div>
+                    <div class="story-preview">Tối nay anh mới rảnh, lâu rồi mới ngồi lại ăn uống với anh em trong công ty. Mấy đứa gặp là chọc liền sếp ơi, tưởng sếp quên tụi em luôn rồi! nghe vậy...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-31">
+                    <div class="story-header">
+                        <div class="story-number">31</div>
+                        <h3 class="story-title">Phần mềm hỏng</h3>
+                    </div>
+                    <div class="story-preview">Hôm nay không biết vì sao mà hệ thống phần mềm quản lý dự án của văn phòng bỗng dưng gặp sự cố. Buổi sáng mọi thứ vẫn vận hành bình thường, nhưng đến ...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-32">
+                    <div class="story-header">
+                        <div class="story-number">32</div>
+                        <h3 class="story-title">Phụ nữ li hôn</h3>
+                    </div>
+                    <div class="story-preview">Tiến đến hôn nhân với người phụ nữ đã từng có một đời chồng, người đàn ông có thể yên tâm về khả năng chăm sóc chồng con  Vun vén gia đình có đầy đủ k...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-33">
+                    <div class="story-header">
+                        <div class="story-number">33</div>
+                        <h3 class="story-title">PHỤ NỮ TỰ CHỦ</h3>
+                    </div>
+                    <div class="story-preview">PHỤ NỮ TỰ CHỦ KINH TẾ   Tôi luôn tin rằng: không có chuyện đàn ông kiếm được tiền còn phụ nữ thì không. Ở Sun Group, mỗi cá nhân đều có giá trị, và ph...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-34">
+                    <div class="story-header">
+                        <div class="story-number">34</div>
+                        <h3 class="story-title">Rộng lượng</h3>
+                    </div>
+                    <div class="story-preview">Sáng nay có xảy ra chút chuyện.. Sáng anh  lái xe đi mua đồ ăn sáng...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-35">
+                    <div class="story-header">
+                        <div class="story-number">35</div>
+                        <h3 class="story-title">SÁCH RICH DAD</h3>
+                    </div>
+                    <div class="story-preview">...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-36">
+                    <div class="story-header">
+                        <div class="story-number">36</div>
+                        <h3 class="story-title">Sau này</h3>
+                    </div>
+                    <div class="story-preview">Mà em sau này muốn tìm một người như thế nào ?  Anh muốn sống với người mà cả 2 có đủ tình yêu thương mà bao dung lẫn nhau  Anh cho rằng điều quan trọ...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-37">
+                    <div class="story-header">
+                        <div class="story-number">37</div>
+                        <h3 class="story-title">Sự cố photto shop</h3>
+                    </div>
+                    <div class="story-preview">Hôm nay, khi anh xuống văn phòng xem anh em đang chuẩn bị hồ sơ hợp đồng cho khách, bất ngờ khu vực máy photocopy phát ra một tiếng bụp lớn từ hộp cấp...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-38">
+                    <div class="story-header">
+                        <div class="story-number">38</div>
+                        <h3 class="story-title">Tập thể dục</h3>
+                    </div>
+                    <div class="story-preview">Dẫn vào câu chuyện: Anh chuẩn bị đi chạy bộ, xem hôm nay có thể phá kỷ lục của mình được không. Lần trước anh chạy được 4km  Trước đây có lần anh đang...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-39">
+                    <div class="story-header">
+                        <div class="story-number">39</div>
+                        <h3 class="story-title">Tình yêu là gì</h3>
+                    </div>
+                    <div class="story-preview">Vì theo anh nghĩ tình yêu là nó xuất phát từ 2 phía 1 phần nữa là nếu mình yêu thương 1 ai đó thì mình cũng sẽ yêu luôn cái tính cách và thấu hiểu cho...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-40">
+                    <div class="story-header">
+                        <div class="story-number">40</div>
+                        <h3 class="story-title">TỔNG KẾT QUỸ PHÚC LỢI</h3>
+                    </div>
+                    <div class="story-preview">TỔNG KẾT QUỸ PHÚC LỢI   Cuối năm luôn là thời điểm bận rộn nhất. Hôm nay, tôi dành trọn cả ngày để xem xét lại quỹ phúc lợi, rà soát toàn bộ các khoản...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-41">
+                    <div class="story-header">
+                        <div class="story-number">41</div>
+                        <h3 class="story-title">trải qua</h3>
+                    </div>
+                    <div class="story-preview">TRẢI QUA THỜI GIAN   Ngần ấy thời gian anh cũng không biết là mình đi đến như thanh xuân như bây giờ là phải hoc và trải qua bao nhiêu thăng trầm nữa ...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-42">
+                    <div class="story-header">
+                        <div class="story-number">42</div>
+                        <h3 class="story-title">TỪ THIỆN</h3>
+                    </div>
+                    <div class="story-preview">TỪ THIỆN BỆNH VIỆN   Một buổi sáng trong bệnh viện. Sáng nay, anh dậy sớm hơn thường lệ, xếp mấy thùng sữa Fami lên xe rồi chạy thẳng vào bệnh viện...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-43">
+                    <div class="story-header">
+                        <div class="story-number">43</div>
+                        <h3 class="story-title">Tuấn vay 200 triệu</h3>
+                    </div>
+                    <div class="story-preview">Không ai biết trước được điều gì sẽ xảy ra trong đời tai nạn hay bất ngờ  Ngày hôm đó, Tuấn bạn thân của anh tìm đến và vay 200 triệu đồng  Bố cậu ấy ...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-44">
+                    <div class="story-header">
+                        <div class="story-number">44</div>
+                        <h3 class="story-title">Ứng lương 3 lần</h3>
+                    </div>
+                    <div class="story-preview">Hôm nay anh tới công ty anh nghe bên bộ phận kế toán báo cô tạp vụ tháng này ứng lương 3 lần rồi  Nghe được tin ấy anh đã đi hỏi cô ấy và biết được ho...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-45">
+                    <div class="story-header">
+                        <div class="story-number">45</div>
+                        <h3 class="story-title">Uống rượu với khách hàng</h3>
+                    </div>
+                    <div class="story-preview">Ở bên ngoài anh thấy một người đàn ông say rượu đang quát mắng một em gái, sau đó còn tát em ấy. Anh đoán họ là người yêu nhau, nhưng dù thế nào đi nữ...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-46">
+                    <div class="story-header">
+                        <div class="story-number">46</div>
+                        <h3 class="story-title">VẤN ĐỀ HÔN NHÂN</h3>
+                    </div>
+                    <div class="story-preview">VẤN ĐỀ VỀ HÔN NHÂN   Lời nói độc hại chỉ khiến người thân yêu ngày càng xa cách. Vết thương cơ thể có thể chữa lành theo thời gian...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+                <div class="story-item" id="story-47">
+                    <div class="story-header">
+                        <div class="story-number">47</div>
+                        <h3 class="story-title">vươn lên chính mình</h3>
+                    </div>
+                    <div class="story-preview">VƯƠN LÊN CHÍNH MÌNH   Hãy nhớ kỹ: Dựa vào ai cũng không bằng dựa vào chính mình. Con người vốn phức tạp và dễ thay lòng đổi dạ, đời này không có bến t...</div>
+                    <a href="FULL.html" class="view-full-btn">Đọc Đầy Đủ →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 - Bộ sưu tập câu chuyện ý nghĩa | <a href="FULL.html" style="color: inherit; text-decoration: underline;">Xem Giao Diện Đầy Đủ</a></p>
         </div>
     </div>
 
     <script>
+        // create decorative stars
         function createStars() {
             const container = document.getElementById('starsContainer');
+            if (!container) return;
             for (let i = 0; i < 50; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
@@ -334,24 +768,32 @@
                 container.appendChild(star);
             }
         }
-
         createStars();
 
-        document.addEventListener('mousemove', function(e) {
-            const usernameText = document.querySelector('.username-text');
-            const x = (e.clientX / window.innerWidth) * 20 - 10;
-            const y = (e.clientY / window.innerHeight) * 20 - 10;
-            usernameText.style.transform = `perspective(1000px) rotateX(${y}deg) rotateY(${x}deg)`;
+        const searchInput = document.getElementById('searchInput');
+        const storyList = document.getElementById('storyList');
+        
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const links = storyList.querySelectorAll('a');
+            
+            links.forEach(link => {
+                const text = link.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    link.parentElement.style.display = 'block';
+                } else {
+                    link.parentElement.style.display = 'none';
+                }
+            });
         });
 
-        document.addEventListener('mouseleave', function() {
-            const usernameText = document.querySelector('.username-text');
-            usernameText.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
-        });
-
-        function openActionPage() {
-            // Redirect to the reference page (tham khảo)
-            window.location.href = 'index.html';
+        function highlightStory(index) {
+            const story = document.getElementById('story-' + index);
+            story.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            story.style.background = '#fff9e6';
+            setTimeout(() => {
+                story.style.background = 'white';
+            }, 2000);
         }
     </script>
 </body>
