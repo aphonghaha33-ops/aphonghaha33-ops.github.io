@@ -1,0 +1,1359 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tất Cả Câu Chuyện</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes bgGradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(45deg, #1a1a1a, #2d2d2d, #1a1a1a);
+            background-size: 300% 300%;
+            animation: bgGradient 8s ease infinite;
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            color: #fff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(255,255,255,0.3), 2px 2px 8px rgba(0,0,0,0.5);
+            font-weight: 700;
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 16px;
+            font-weight: 300;
+        }
+
+        .stories-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .story-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .story-item:hover {
+            box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+            transform: translateY(-6px);
+        }
+
+        .story-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px 26px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+        }
+
+        .story-header:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #6a3f91 100%);
+        }
+
+        .story-title {
+            color: white;
+            font-size: 19px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+        }
+
+        .story-toggle {
+            color: white;
+            font-size: 24px;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+        }
+
+        .story-item.active .story-toggle {
+            transform: rotate(180deg);
+        }
+
+        .story-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.45s cubic-bezier(.2,.9,.2,1), padding 0.35s ease, opacity 0.35s ease, transform 0.35s ease;
+            background: white;
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+
+        .story-item.active .story-content {
+            max-height: 3000px;
+            padding: 34px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .story-text {
+            font-family: 'Segoe UI', Verdana, sans-serif;
+            line-height: 2.2;
+            text-align: left;
+            color: #222;
+            font-size: 16px;
+        }
+
+        .story-line {
+            margin-bottom: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .story-line:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes twinkle { 0%,100%{ opacity:0.3 } 50%{ opacity:1 } }
+        .stars{ position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; overflow:hidden; pointer-events: none }
+        .star{ position:absolute; width:2px; height:2px; background:#fff; border-radius:50%; animation:twinkle 3s ease-in-out infinite; pointer-events: none }
+        .floating-element{ position:fixed; font-size:60px; opacity:0.08; pointer-events:none; z-index:0; animation:float 6s ease-in-out infinite }
+        .float1{ top:10%; left:5%; animation-delay:0s }
+        .float2{ top:60%; right:5%; animation-delay:2s }
+        .float3{ bottom:10%; left:10%; animation-delay:4s }
+        @keyframes float { 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(-20px) } }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .story-title {
+                font-size: 16px;
+            }
+
+            .story-content {
+                padding: 20px;
+            }
+
+            .story-text {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="starsContainer"></div>
+    <div class="floating-element float1">✨</div>
+    <div class="floating-element float2">🌟</div>
+    <div class="floating-element float3">💫</div>
+    <div class="container">
+        <div class="header">
+            <h1>NGUOITAIKHONGDOANHTHU3</h1>
+            <p>Nỗ lực cũng bằng thừa</p>
+        </div>
+
+        <div class="stories-container">            <div class="story-item" data-story="39 câu chuyện thường ngày">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">39 câu chuyện thường ngày</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Ok em, anh đã chỉnh toàn bộ thành “công ty” và bỏ hết chữ xưởng gỗ / văn phòng.</div>
+                        <div class="story-line">Giữ nguyên xưng anh – em và nội dung cốt lõi, chỉ đổi các chỗ liên quan tới xưởng/văn phòng cho trung tính hơn: 1.Hôm nay trên đường về thăm nhà, anh thấy quán vịt quay đông, ghé mua 2 con một con biếu ông bà ngoại (bố mẹ vợ cũ), một con mang về cho bố mẹ và con.</div>
+                        <div class="story-line">Anh nghĩ chịu khó làm hơn một chút, niềm vui sẽ nhân đôi.</div>
+                        <div class="story-line">Dù vợ đã mất, anh vẫn chu toàn với ông bà ngoại của con trai vì mẹ của con anh là con trai của họ 2.Bạn thân rủ anh ghé nhà bàn việc, biếu anh trà thượng hạng.</div>
+                        <div class="story-line">Nhấp thì đắng chát, nhưng sau có hậu ngọt.</div>
+                        <div class="story-line">Đời cũng vậy: ban đầu đắng, rồi sẽ ngọt nếu mình kiên nhẫn.</div>
+                        <div class="story-line">3.Sống một mình, anh hay ăn ngoài.</div>
+                        <div class="story-line">Hôm nay bận quá quên cả bữa tối.</div>
+                        <div class="story-line">Anh tự nhắc: khi còn sức khỏe và cơ hội, cố gắng để tương lai con cái đỡ khổ.</div>
+                        <div class="story-line">4.Tối về, tắm ăn xong, anh đọc sách về cuộc sống.</div>
+                        <div class="story-line">Với anh, đơn giản buông kỷ luật nhờ đọc và cố gắng, ngày mai sẽ tốt hơn.</div>
+                        <div class="story-line">5.Sáng nay anh ra ngân hàng vay vốn chuẩn bị mua máy mới cho công ty (hoặc góp thêm vốn cho thương vụ tới).</div>
+                        <div class="story-line">May có chị Hà hướng dẫn nên thủ tục suôn sẻ; chị còn nhắc cập nhật xác thực sinh trắc học theo quy định mới.</div>
+                        <div class="story-line">Chị hiền hòa, hay mời anh qua dùng cơm dịp lễ mối quan hệ đáng trân trọng.</div>
+                        <div class="story-line">6.Hôm nay anh đi kiểm tra khu sản xuất của công ty.</div>
+                        <div class="story-line">Nghe một máy sản xuất kêu lạ, anh rà soát thì phát hiện dưới cụm truyền tải rò ít dầu; cùng thợ siết lại roăng, châm dầu — máy êm ngay.</div>
+                        <div class="story-line">Thợ chia sẻ tinh thần chưa ổn vì tang mẹ; anh nhắc ưu tiên an toàn, dây chuyền phải trơn tru để tránh tai nạn.</div>
+                        <div class="story-line">7.Nghe tin vợ anh Hùng (bộ phận hoàn thiện) tai nạn xe sáng nay, nhà còn con tiểu học.</div>
+                        <div class="story-line">Anh hỏi han, cho Hùng nghỉ sớm đón con, dặn khó khăn cứ báo.</div>
+                        <div class="story-line">8.Chiều nay công ty ký hợp đồng mới.</div>
+                        <div class="story-line">Anh cảm ơn toàn thể, nhất là khối sản xuất & gia công — vất vả nhất.</div>
+                        <div class="story-line">Anh nhờ chuẩn bị hoa quả, nước ngọt; mỗi tháng anh vẫn rủ mọi người đi ăn vài lần để động viên.</div>
+                        <div class="story-line">9.Anh về sớm mua quà sinh nhật mẹ (bà nội cu Bon) và đặt ghế massage cho mẹ (đau lưng mãn).</div>
+                        <div class="story-line">Hy vọng mẹ thư gaiãn, bớt đau.</div>
+                        <div class="story-line">Bây giờ chẳng gì quý hơn sức khỏe bố mẹ.</div>
+                        <div class="story-line">10.Một buổi chiều kín lịch.</div>
+                        <div class="story-line">Sắp xếp hợp lý, giữ mọi thứ tự nhiên, đầu óc nhẹ hơn.</div>
+                        <div class="story-line">Trong kế hoạch luôn có gia đình, bạn bè, và kỷ luật bản thân để có bình an.</div>
+                        <div class="story-line">Nói với em chút, giờ anh về đi cầu lông với anh em.</div>
+                        <div class="story-line">11.Anh không cầu kỳ; trân trọng tình cảm chân thành từ điều giản dị.</div>
+                        <div class="story-line">Tối nghe mẹ và bác gái kể chuyện xưa, anh thấy mình nhỏ bé trước tình thương của các bà.</div>
+                        <div class="story-line">Chỉ mong mẹ khỏe, vui bên con cháu.</div>
+                        <div class="story-line">12.Em hôm nay sao rồi? Công việc bận không? Nhớ giữ sức khỏe, dành thời gian cho bản thân.</div>
+                        <div class="story-line">Bây giờ chỉ mong gia đình hạnh phúc, bình an.</div>
+                        <div class="story-line">13.Tới đây, anh sắp cùng mấy anh chị bên Mặt trận Tổ quốc đi Lào Cai thăm vùng lũ.</div>
+                        <div class="story-line">Trước đó công ty đã gửi tiền và nhu yếu phẩm; lần này đi thực tế cho thấm.</div>
+                        <div class="story-line">14.Sáng vào công ty, kế toán báo Nam (kiểm tra chất lượng) đi muộn vì bà ngoại tai biến.</div>
+                        <div class="story-line">Anh ghé hỏi, cho Nam nghỉ ngay vào viện; việc giao Tuấn xử lý.</div>
+                        <div class="story-line">Sinh lão bệnh tử, khó nói trước.</div>
+                        <div class="story-line">15.Anh vào viện thăm bà ngoại của Nam; may bà đã tỉnh, ăn được cháo anh gọi Nam ra, hỗ trợ ít chi phí, rồi chào cụ 16.Ra khỏi viện, suýt va shipper trong ngõ.</div>
+                        <div class="story-line">Anh phanh kịp; cậu ấy ngã nhẹ.</div>
+                        <div class="story-line">Anh đỡ xe, dặn dò: bận mấy cũng phải cẩn thận.</div>
+                        <div class="story-line">17.</div>
+                        <div class="story-line">giờ, anh gặp đối tác (duyên từ lần xe hàng công ty kẹt thủ tục ở cửa khẩu, họ hỗ trợ kết nối).</div>
+                        <div class="story-line">Nhiều mối quan hệ tình cờ thành thân.</div>
+                        <div class="story-line">18.Giờ anh đang làm việc với đối tác; họ đơn giản, dễ trao đổi.</div>
+                        <div class="story-line">Mong sản phẩm công ty đáp ứng đủ chi tiết kỹ thuật.</div>
+                        <div class="story-line">Em chuẩn bị cơm nhé, anh bận tiếp 19.Tối hợp tác thành công có hạng mục rất tỉ mỉ, nhưng anh tin đội ngũ công ty 20.Sáng chào em.</div>
+                        <div class="story-line">Tối qua anh nghiên cứu mô hình sản phẩm nên ngủ muộn; sáng dậy mệt, hơi đau đầu mới thấy giấc ngủ quan trọng thế nào 21.Vừa tới công ty, việc dồn.</div>
+                        <div class="story-line">Đi một đoạn thủng lốp; may gặp Nam, anh gọi cứu hộ rồi đi nhờ Nam; xe kéo tới sau.</div>
+                        <div class="story-line">22.Em ăn trưa chưa? Anh bận với hai bộ bàn ghế mẫu mới; có khách đặt hàng, anh cùng anh em chọn vật liệu để kịp giao nhà mới.</div>
+                        <div class="story-line">Vất vả nhưng vui vì nỗ lực có quả.</div>
+                        <div class="story-line">23.Lát nữa anh ghé nhà, đón mẹ vào viện thăm bà dì thân bị ốm nặng, xem tình hình thực tế.</div>
+                        <div class="story-line">24.Vừa nhận thông báo cắt điện 1 giờ để sửa trạm.</div>
+                        <div class="story-line">May đầu năm công ty sắm hai máy phát không đứt mạch sản xuất.</div>
+                        <div class="story-line">Đồng tiền đi trước là đồng tiền khôn.</div>
+                        <div class="story-line">25.Cho anh hỏi theo em, chuẩn mực đàn ông thời nay nên thế nào để phụ nữ trân trọng & tôn trọng? Đàn ông hay vô tâm, anh muốn học lắng nghe hơn.</div>
+                        <div class="story-line">26.Tối nay anh sắp xếp qua ông bà ngoại bé Bi (hai tuần chưa ghé), mua ít đồ; người quen mang từ Hong Kong thuốc phòng đột quỵ, anh biếu hai ông bà — mong có ích.</div>
+                        <div class="story-line">27.Mỗi tối, anh dành thời gian chạy bộ & thư giãn nhìn lại ngày làm được gì, thấy trọn vẹn thì nhẹ đầu.</div>
+                        <div class="story-line">28.Anh thích nuôi cá cảnh.</div>
+                        <div class="story-line">Hồi mua căn hộ, vợ chồng chọn chỗ đặt bể rất ưng.</div>
+                        <div class="story-line">Sau giờ làm, ngắm cá bơi thấy dịu căng thẳng hẳn.</div>
+                        <div class="story-line">29.Chiều ghé chợ gần nhà mua ít đồ.</div>
+                        <div class="story-line">Lâu rồi không đi, thích cảm giác rộn ràng, người bán hỏi han như khách quen.</div>
+                        <div class="story-line">Tranh thủ chút mà giá trị rất ý nghĩa.</div>
+                        <div class="story-line">30.Em đang làm gì? Tối nay có đi đâu không? Anh hẹn mấy anh em cà phê bàn việc lâu rồi chưa ngồi.</div>
+                        <div class="story-line">Chúc em chiều vui vẻ, anh bận tí, em yêu à! 31.Ngày mai anh đi họp phụ huynh cu Bin.</div>
+                        <div class="story-line">Việc bận nhưng chuyện của con anh tự đi.</div>
+                        <div class="story-line">Bé thiệt thòi, anh muốn bù đắp.</div>
+                        <div class="story-line">Việc chăm con gì anh chưa rành, mong em chỉ giúp — tình thương của mẹ là trọn vẹn nhất.</div>
+                        <div class="story-line">32.Anh dự định cuối năm sắp xếp cho mẹ và con đi du lịch.</div>
+                        <div class="story-line">Tiền không mang theo được; sức khỏe & gia đình mới quan trọng.</div>
+                        <div class="story-line">Em rành nơi đẹp đúng mùa, chỉ anh với — hoặc hai gia đình cùng đi càng vui.</div>
+                        <div class="story-line">33.Ở khu anh có bác Dũng bán vé số.</div>
+                        <div class="story-line">Mấy hôm không thấy, hỏi ra mới biết bác mất trong nhà trọ, đã đưa về quê.</div>
+                        <div class="story-line">Nghĩ những số phận lam lũ, anh tự nhủ: bất hiếu với cha mẹ là thất bại lớn nhất.</div>
+                        <div class="story-line">34.Thế hệ mình đủ đầy hơn bố mẹ.</div>
+                        <div class="story-line">Nghe bố kể ngày xưa mưa bão bế con chạy tránh nạn, càng trân trọng cuộc sống hôm nay.</div>
+                        <div class="story-line">35.Đời có lúc thời gian lấy đi nhiều thứ.</div>
+                        <div class="story-line">Sau bận bịu, điều mong nhất là bình an nội tâm.</div>
+                        <div class="story-line">Lâu lắm rồi anh mới có thời gian trải lòng về những cảnh đời quanh công ty.</div>
+                        <div class="story-line">36.Cô Nga gắn bó từ ngày công ty còn nhỏ, làm dọn dẹp & sắp xếp, cũng là bà con xa.</div>
+                        <div class="story-line">Sáng thấy cô thẫn thờ, hỏi mới biết hôm qua về trễ, chồng gia trưởng + rượu đập phá; con út 9 tuổi can ngăn bị bong gân.</div>
+                        <div class="story-line">Anh an ủi, dặn giữ sức khỏe, hỗ trợ ít chi phí cho cháu — trân trọng người lao động tận tụy.</div>
+                        <div class="story-line">37.Anh ghé thăm bác tài xế tai nạn 2 năm trước khi chở hàng đêm đường đèo; do mệt mỏi, xe công ty lật, bác phải cưa chân.</div>
+                        <div class="story-line">Giờ con bác làm ở công ty, vợ bác phụ bếp.</div>
+                        <div class="story-line">Dư âm khó bù đắp; lễ Tết anh hay đưa con gái qua thăm, gửi chút tiền, động viên bác vững vàng.</div>
+                        <div class="story-line">38.Hôm nay công ty và bộ phận hậu cần rất bận.</div>
+                        <div class="story-line">Trước dùng quạt làm mát công nghiệp cho khu làm thô, bụi mịn khiến nhanh hỏng.</div>
+                        <div class="story-line">Mùa nóng, anh thay toàn bộ quạt và lắp thêm 2 điều hòa công suất lớn để mọi người nghỉ ngơi mát mẻ sau giờ làm.</div>
+                        <div class="story-line">39.Chuyện người bạn cấp 3: năm ngoái xin mượn 500 triệu đầu tư bất động sản.</div>
+                        <div class="story-line">Anh khuyên rủi ro, mời bạn thành cổ đông công ty; bạn không theo, anh vẫn cho mượn vì nghĩa.</div>
+                        <div class="story-line">Hôm qua bạn xin mượn thêm 100, anh hỏi lý do thì bạn nói đầu tư lỗ, con gái bệnh nặng, còn lỡ lời khó nghe tưởng anh đòi tiền.</div>
+                        <div class="story-line">Anh nói thẳng: “Tôi từng mời ông nắm cơ hội với công ty mà ông bỏ.</div>
+                        <div class="story-line">Giờ ông thấy tiền quan trọng thế nào khi con bệnh.</div>
+                        <div class="story-line">Tôi không đòi 500, chưa từng lấy lãi.</div>
+                        <div class="story-line">Vì cháu, tôi vẫn giúp; nhưng hãy suy nghĩ lại cách nắm bắt cơ hội.” Anh bực vì không trân trọng cơ hội & tiền, đến khi thất bại mới nhận ra thì đã muộn.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Ai cũng mưu cầu hạnh phúc">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Ai cũng mưu cầu hạnh phúc</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Ai cũng có quyền mưu cầu hạnh phúc Lầm lỡ thì đã sao, chắc hẳn phải có điều gì đó khuất tất mới bỏ chồng Hẳn là có nỗi khổ riêng nên mới quyết định ly hôn để giải thoát cho mình Chứ không ai đang chăn ấm nệm êm mà làm những chuyện đau khổ như vậy Anh cảm thấy yêu người phụ nữ đã có một đời chồng khó khăn vô vàn nhưng lại vô cùng xứng đáng Vốn dĩ cũng giống như những người phụ nữ bình thường mà thôi Nhưng ở có một trái tim của một người mẹ, một trái tim ấm áp hơn bao giờ hết Khi yêu , sẽ không phải đối mặt với việc giận hờn vô cớ hay giận dỗi không có lý do Khi yêu , đôi khi không hiểu được nội tâm của Nhưng khi cảm nhận được sự chân thành sẽ nguyện tận tụy cả đời.</div>
+                        <div class="story-line">Đã từng làm mẹ, làm vợ nên sẽ biết cách chăm sóc người khác như thế nào Đã từng lao đao vì một người nên sẽ biết cách yêu làm sao để tôn trọng đối phương và chính bản thân mình Đã từng phải gánh chịu sự phản bội nên sẽ không là người bội bạc trước Mong manh như bồ công anh trước gió, đẹp đẽ và dễ tổn thương Thế nên nếu gặp thay vì mắng nhiếc hãy ôm vào lòng, xoa dịu những nỗi sợ hãi mà đã phải gánh chịu Bởi đang rất sợ hãi trong mộng tưởng của chính mình, đang chênh vênh không biết đối mặt với cuộc sống phía trước như thế nào Hãy thôi đi những lời mắng nhiếc làm tổn thương thôi đi những lời chỉ trích “đồ cũ kỹ, đồ vứt đi”.</div>
+                        <div class="story-line">Vì suy cho cùng từng chịu tổn thương sẽ nhận lại nhiều điều thú vị Anh là kiểu người khá hướng nội… sống đơn giản và có phần hơi khép kín một chút.</div>
+                        <div class="story-line">Cuộc sống của anh hầu như chỉ xoay quanh công việc, gia đình, và vài mối quan hệ đủ hiểu, đủ tin.</div>
+                        <div class="story-line">Anh không chơi thân với ai cả… không phải vì anh khó gần, mà bởi anh thấy cuộc đời này, để tìm được một người thật lòng thực sự rất hiếm.</div>
+                        <div class="story-line">Có thể nghe qua sẽ thấy anh hơi ích kỷ hay cứng nhắc, nhưng anh chỉ muốn giữ cho mình một khoảng bình yên – không ồn ào, không giả tạo.</div>
+                        <div class="story-line">Anh ghét cờ bạc, không thích rượu bia, cũng chẳng hút thuốc.</div>
+                        <div class="story-line">Nhiều người bảo anh sống "nhàm chán", vì đàn ông bây giờ mấy ai như vậy.</div>
+                        <div class="story-line">Nhưng anh vẫn chọn cách sống ấy, bởi anh nghĩ – cái gì bình lặng nhưng chân thành, thì lâu bền hơn là những thứ quá nhiều màu mè.</div>
+                        <div class="story-line">Trong chuyện tình cảm, anh chưa từng đặt ra một hình mẫu cụ thể nào cả.</div>
+                        <div class="story-line">Bởi khi gặp đúng người, thì mọi tiêu chuẩn đều trở nên vô nghĩa.</div>
+                        <div class="story-line">Quan trọng là mình thật lòng với nhau, cùng nhau chia sẻ mọi vui buồn, và cố gắng vun đắp.</div>
+                        <div class="story-line">Anh tin rằng: "Thấu hiểu là một cách khác để yêu thương." Còn em thì sao…? Em có từng cảm thấy mình lạc lõng giữa thế giới đông người chưa?.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Bản thân stress">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Bản thân stress</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Ở Sài Gòn… đôi khi người ta cứ ngỡ lúc nào cũng nhộn nhịp, nhưng thật ra lại có những góc rất yên.</div>
+                        <div class="story-line">Hồi còn làm việc căng thẳng, nhiều lúc anh không biết nói với ai, chỉ lẳng lặng lái xe một mình ra Cần Giờ… Đường dài, gió biển thổi ào ào, mua hộp muối tôm, bóc trái xoài chua ngồi một mình nhìn sóng.</div>
+                        <div class="story-line">Không cần gì nhiều, chỉ cần vài tiếng như vậy là tâm trạng lại nhẹ đi.</div>
+                        <div class="story-line">Có hôm anh chạy lên Hồ Đá Thủ Đức, hay lên cầu Phú Mỹ lúc đêm khuya.</div>
+                        <div class="story-line">Thành phố khi đó không còn vội vã, chỉ có mình với đèn xe.</div>
+                        <div class="story-line">Em có bao giờ như vậy không? Có những hôm chỉ muốn biến mất một hôm, không nói chuyện, không ồn ào, không thông báo gì hết… Em thích đi đâu khi tâm trạng không ổn? Đi biển nghe sóng hay về miền Tây nghe tiếng ghe gõ nước? Với anh, vẻ đẹp vùng ngoại thành hay mấy tỉnh gần gần như Đà Lạt, Bảo Lộc, Lagi, hoặc Phan Thiết… là đủ rồi.</div>
+                        <div class="story-line">Từ Sài Gòn đi Đà Lạt thì xa, nhưng đáng.</div>
+                        <div class="story-line">Còn nếu muốn gần thì có Vũng Tàu – một chiều chạy là tới, biển đêm cũng đẹp lắm em.</div>
+                        <div class="story-line">Phòng ở Vũng Tàu thì tầm 400 – 1 triệu một đêm.</div>
+                        <div class="story-line">Còn Đà Lạt hay Lagi thì 350 – 800 ngàn cũng có phòng xinh.</div>
+                        <div class="story-line">Đi một mình thì yên, nhưng có người đi cùng thì mới thực sự là kỷ niệm… phải không em?.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="bữa ăn cùng nhân viên">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">bữa ăn cùng nhân viên</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">BỮA ĂN CÙNG NHÂN VIÊN Mấy hôm nay công việc của anh bận quá, không thể để ý, kiểm soát hết mọi việc trong công ty Anh nghe nhân viên văn phòng bảo rằng mấy bữa ăn gần đây trong căn tin vừa ít, vừa khô, lại còn hơi có mùi tanh khó ăn Ban đầu, anh cứ nghĩ mọi người đùa vui cho qua, bởi anh đã hợp tác với doanh nghiệp cung cấp suất ăn với mức giá gần gấp đôi so với thị trường, hy vọng anh em được bữa ăn chất lượng hơn Hôm nay rảnh rỗi, anh quyết định xuống căn tin ăn thử cùng nhân viên Nhưng chưa kịp ngồi xuống, anh đã sững người trước cảnh tượng trước mắt món ăn thì ít, trình bày sơ sài, nhìn còn chẳng muốn nuốt, chứ chưa nói đến ăn cho đủ sức làm việc cả ngày Làm văn phòng đã cần năng lượng, làm việc trong ngành gỗ, công việc còn nặng nhọc hơn, nếu bữa ăn không đủ chất thì sao anh em có thể làm việc lâu dài và gắn bó? Anh ngồi xuống ăn cùng mọi người để cảm nhận thực tế.</div>
+                        <div class="story-line">Thấy đúng như những gì anh em phản ánh, anh liền gọi quản lý lên trao đổi trực tiếp Anh yêu cầu phải cải thiện ngay chất lượng bữa ăn trong căn tin Đồng thời, anh cũng chỉ đạo tuyển thêm một đầu bếp mới để làm phong phú thực đơn, tăng cường dinh dưỡng cho nhân viên Với anh, công việc có vất vả đến đâu thì cũng nhờ sự đóng góp của tất cả mọi người.</div>
+                        <div class="story-line">Công ty có thể phát triển được, chính là nhờ sức lao động và tinh thần của tập thể Vì vậy, chăm lo cho sức khỏe của anh em chính là ưu tiên hàng đầu.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Cầu lông">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Cầu lông</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Đi chơi cầu lông Anh đang đi chơi cầu lông em à Hầu như ngày nào anh cũng chơi thể thao hết, trước anh có đá bóng nữa nhưng giờ cũng có tuổi rồi.</div>
+                        <div class="story-line">Nên anh chơi môn thể thao nhẹ nhàng hơn trước đây anh cũng thường xuyên đá bóng lắm nhưng từ lúc nhân viên anh đá bóng bị đứt dây chằng và phải nằm viện nên anh hạn chế đi đá bóng lại Nhỡ như xui rồi có bị gì thì nhân viên với mọi người nữa sợ như thế bố mẹ với con gái lại càng thêm lo lắng Giờ anh cũng cố gắng làm việc để mong con sau này có một cuộc sống tốt hơn như anh lúc bé đã khổ rồi gia đình cũng không được mấy khá giả nên giờ phải cố gắng để cho con có môt cuộc sống tốt hơn em à.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Cha tốt hiếu thảo">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Cha tốt hiếu thảo</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Hôm nay trên đường về thăm nhà, gần tới nơi anh thấy một quán vịt quay có nhiều người đứng chờ mua Anh đoán chắc vịt ngon nên tấp xe vào, chờ mua 2 con Một con anh mang biếu ông bà ngoại (bố mẹ vợ cũ), một con mang về cho anh và con ăn Anh vẫn nghĩ trong đời, chịu khó làm hơn một chút, cố thêm một chút, niềm vui sẽ nhân đôi Dù vợ đã mất mấy năm, anh vẫn tôn trọng và chăm lo chu toàn cho ông bà ngoại của con trai vì con gái của họ đã từng là mẹ của con anh tình nghĩa đó, anh luôn giữ trọn.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="chào hẹn hò">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">chào hẹn hò</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Chị nói em ở Sài Gòn nhận gia sư, có lớp dạy riêng đi làm nghiêm túc ở nhà sống với bố mẹ thích thể thao, hay đánh cầu lông đúng không? Nhưng chị Lan cho anh số là anh lưu vào liền anh khó có thể nhầm lẫn lắm em vì anh làm ăn kinh doanh nên số điện thoại anh cẩn trọng Thành thật anh xin lỗi em nhiều anh có đọc lại số cho chị Lan và chị Lan có kiểm tra thì chị Lan có cho nhầm một số thành ra số của em Em đúng là một người tốt bụng, nếu là người khác chắc anh đã bị mắng một trận rồi Không sao, tôi cũng là người làm kinh doanh, tôi thích kết bạn, có thêm bạn là có thêm cơ hội.</div>
+                        <div class="story-line">Dù hôm nay là một sự hiểu lầm nhưng tôi thấy đó cũng là một cái duyên Hỏi khách hàng về quà tặng cho buổi hẹn hò Chị Lan đã hẹn anh và cô ấy đi ăn cùng nhau Anh dù lớn tuổi nhưng đây là lần đầu tiên đi hẹn hò qua mai mối, không biết lần đầu gặp mặt thì nên tặng quà gì cho phù hợp? Em có thể cho anh một số gợi ý không? Vì em là phụ nữ, bạn sẽ hiểu phụ nữ thích gì hơn anh Tôi là người làm kinh doanh, tôi cảm thấy đi tay không thì không hay lắm Tôi muốn chuẩn bị quà để thể hiện sự tôn trọng với buổi gặp mặt, tạo ấn tượng tốt hơn Hẹn hò thất bại Ôi, có vẻ anh không thể mời em tham dự đám cưới của anh rồi Cô ấy là người rất tốt, sinh năm 1991, có chí cầu tiến và độc lập tài chính, cô ấy tự mở một tiệm spa Nhưng yêu cầu của cô ấy anh không thể chấp nhận được.</div>
+                        <div class="story-line">Cô ấy muốn anh mua một căn nhà và đứng tên cô ấy, điều đó anh có thể làm Nhưng cô ấy lại muốn con trai tôi ở với ông bà nội, không sống chung với chúng anh sau khi kết hôn Điều này tôi không thể đồng ý vì anh muốn tìm một người chấp nhận con trai anh Thành thật mà nói, anh vẫn muốn tìm một người có cùng hoàn cảnh để cả hai thấu hiểu nhau và cùng xây dựng một gia đình trọn vẹn.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Có khách hàng">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Có khách hàng</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Hôm nay, anh may mắn có thêm một khách hàng mới nhờ người bạn quen trong buổi giao lưu cầu lông giới thiệu Anh tên Hoàng một người rất thân thiện, vui vẻ và hoạt bát trong công việc Anh vốn rất trân trọng những người có năng lượng tích cực như vậy Anh đưa anh Hoàng xuống tham quan khu vực kinh doanh Anh ấy thật sự hài lòng từ quản lý kinh doanh đến cách làm việc của nhân sự, mọi thứ đều vận hành trôi chảy và chuyên nghiệp Anh Hoàng còn khen ngợi ở đây, ai cũng có tinh thần tích cực, nhìn vào đã thấy muốn làm việc hết mình Nghe những lời ấy, anh cảm thấy rất tự hào Bởi anh luôn tin rằng một công ty không thể thành công chỉ nhờ lãnh đạo, mà cần tất cả mọi người cùng nhau tạo nên một tập thể gắn kết, năng lượng tích cực mới tạo ra sản phẩm chất lượng Ở Sun Group, đó chính là văn hóa khách hàng được phục vụ tốt nhất khi mỗi nhân viên đều làm việc trong một môi trường tích cực và đầy cảm hứng.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Con bị cô giáo gọi điện">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Con bị cô giáo gọi điện</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Hôm nay cô giáo gọi cho bà nội bảo con anh nay trên trương hư lắm em à.</div>
+                        <div class="story-line">dám đánh nhau với bạn cùng lớp.</div>
+                        <div class="story-line">cô giáo hỏi ra vấn đề gì thì con không bảo gì cả.</div>
+                        <div class="story-line">con im không nói gì hết.</div>
+                        <div class="story-line">đến về tận nhà bà hỏi con cũng không trả lời.</div>
+                        <div class="story-line">bà mói gọi mách với anh thì anh hỏi con lúc đó con cũng không muốn trả lời.</div>
+                        <div class="story-line">anh không thể nào nói một cách cứng ngắt với con được.</div>
+                        <div class="story-line">anh mới nói nhẹ nhàn trầm ấm hơn một chút với con là hôm nay con có chuyện gì trên lớp mà con đánh bạn.</div>
+                        <div class="story-line">thì con mới nói bạn nói con là đứa không có mẹ.</div>
+                        <div class="story-line">anh thực sự lúc đó cảm giác vừa lo vừa sợ anh mới nói với con dù có như thế nào con cũng không được đánh bạn.</div>
+                        <div class="story-line">nếu mà người đó không tốt con không cần tiếp tục nói chuyện cũng như là chơi cùng nữa.</div>
+                        <div class="story-line">chứ nếu như con đánh bạn là con cũng là một người xấu bố sẽ không thương con nữa đâu.</div>
+                        <div class="story-line">điều này thật sự là bố không thích chút nào.</div>
+                        <div class="story-line">bố không muốn thấy nó xảy ra thêm một lần nào nữa.</div>
+                        <div class="story-line">lúc đó con mới xin lỗi anh và hứa với anh không bao giờ tái phạm nữa.</div>
+                        <div class="story-line">con vâng lời bố ạ.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Con buồn">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Con buồn</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Đứa trẻ nhà anh hôm nay được bà đưa đi học.</div>
+                        <div class="story-line">lúc đến trường con thấy một gia đình cũng đang đưa con mình đến trường.</div>
+                        <div class="story-line">thì lúc đó con đang vui vẻ bỗng con nặng chịu mặt xuống vì cảm giác buồn.</div>
+                        <div class="story-line">chiều ngày hôm đó con về gọi cho anh kể với anh hôm nay con đến trường gặp bạn cùng trường có bố mẹ đưa con đi học.</div>
+                        <div class="story-line">con mới nói với anh ước gì con cũng được ba mẹ đưa con đi học bố ơi.</div>
+                        <div class="story-line">anh bỗng chết lặng một hồi thì anh mới nói với con rằng.</div>
+                        <div class="story-line">con gái của bố à , con là niệm hạnh phúc lớn nhất của bố mẹ.</div>
+                        <div class="story-line">tuy mẹ con không còn nữa nhưng mẹ vẫn còn mãi ở trong tim của các con.</div>
+                        <div class="story-line">bố không ở cạnh con nhưng bố và mẹ luôn dành những điều yêu thương tuyệt vời nhất cho các con.</div>
+                        <div class="story-line">chỉ là bố đang bận chút công việc hiện tại không thể bên con được.</div>
+                        <div class="story-line">còn mẹ thì vẫn năm mãi trong tim các con yêu à.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Con ốm">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Con ốm</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Hôm nay con anh bị bệnh chắc là đi ra đường không đội nón áo khoác các thứ vào.</div>
+                        <div class="story-line">Rồi cảm vặt con anh hay cảm vặt lắm đề kháng không tốt nên ra đường mà không đội nón mặc áo khoác cẩn thận vào là rất dễ bị cảm.</div>
+                        <div class="story-line">Bữa nay bà nội đưa lên bệnh viện kiểm tra lấy thuốc uống.</div>
+                        <div class="story-line">Bác sĩ đòi tiêm thuốc nhưng con bé không chịu.</div>
+                        <div class="story-line">Con bé con anh sợ kim tiêm lắm nhưng mà cảm sốt là liên tục.</div>
+                        <div class="story-line">Rốt cuộc đi cũng không chịu tiêm nên bác sĩ lấy thuốc về cho con uống giải cảm hạ sốt nên giờ cũng khỏe rồi em à.</div>
+                        <div class="story-line">Anh còn nhớ lúc trước mẹ nó còn sống con bé sốt nữa đêm mà cô ấy không thể nào mà ngủ được với con thức cả đêm lau mình rồi cho con bé uống hạ sốt liên tục.</div>
+                        <div class="story-line">Phải nói cô ấy vất vả với hai ba con anh nhiều lắm.</div>
+                        <div class="story-line">Mỗi lần 2 ba con đi đâu là chỉ tầm 30p là gọi hỏi rồi hỏi 2 ba con về nhà chưa trễ lắm rồi về đi.</div>
+                        <div class="story-line">Có những điều không thể nào quên đi được.</div>
+                        <div class="story-line">Cũng phải đành chấp nhận giao phó cuộc đời cho số phận thôi em à.</div>
+                        <div class="story-line">Cũng lâu rồi anh chưa được nghe câu nói trễ rồi 2 ba con về nhà chưa.....</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="ĐA DẠNG HÓA NGUỒN THU">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">ĐA DẠNG HÓA NGUỒN THU</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">ĐA DẠNG HÓA THU NHẬP - NHIỀU ĐẦU THU Đa dạng hóa nguồn thu nhập là một trong những điều rất quan trọng để kiểm soát tài chính tốt hơn.</div>
+                        <div class="story-line">Sẽ rất rủi ro nếu bạn chỉ có một nguồn thu duy nhất.</div>
+                        <div class="story-line">Bạn có thể tìm hiểu thêm những việc có thể làm vào thời gian rảnh và phát triển thêm các nguồn thu nhập dựa trên năng lực của bạn 2.</div>
+                        <div class="story-line">THIẾT LẬP KẾ HOẠCH TÀI CHÍNH - Hiện nay, rất nhiều người chỉ biết nhận lương và chi tiêu tháng này qua tháng khác.</div>
+                        <div class="story-line">Nếu muốn kiểm soát tốt tài chính của chính mình, bạn cần có ý tưởng rõ ràng về cách sử dụng tiền của mình.</div>
+                        <div class="story-line">Hãy lập kế hoạch cho những mục tiêu tài chính của bạn trong tương lai 3.</div>
+                        <div class="story-line">TÌM HIỂU VỀ ĐẦU TƯ ĐỂ MỞ RỘNG TÀI CHÍNH CỦA BẠN.</div>
+                        <div class="story-line">Nhắc đến đầu tư, rất nhiều người sẽ nghĩ ngay đến sự "mạo hiểm" và "rủi ro".</div>
+                        <div class="story-line">Thực chất, chính suy nghĩ này đã khiến bạn m.ất đi rất nhiều cơ hội mở rộng tài chính.</div>
+                        <div class="story-line">Bạn sẽ không cảm thấy bị đe dọa bởi thế giới kinh doanh và đầu tư nếu nghiên cứu kỹ càng và đầu tư tiền một cách khôn ngoan 4.</div>
+                        <div class="story-line">CHỌN MẶT GỬI VÀNG ĐÚNG CHỖ - KHÔNG SỢ RỦI RO -Không có công thức cố định nào cho thành công, nhưng chắc chắn trong đó không có sự an toàn và thoải mái.</div>
+                        <div class="story-line">Tất cả “đại gia” mà bạn biết đều là người tự tin, quyết đoán, biết chấp nhận rủi ro và chuẩn bị cho thất bại.</div>
+                        <div class="story-line">- Chọn người cố vấn tài chính hoặc quản lý đầu tư là lựa chọn khó khăn thứ hai đời bạn (sau chọn vợ/chồng), nên hãy cẩn thận “nhắm” cho đúng người.</div>
+                        <div class="story-line">Nếu không, bạn thậm chí sẽ chẳng còn thời gian mà khóc.</div>
+                        <div class="story-line">Hãy lựa chọn những người có kiến thức trong lĩnh vực đầu tư đó và bạn nhìn thây năng lực cũng như họ thật sự kiếm tiền từ đó 5.</div>
+                        <div class="story-line">TÌM SƯ PHỤ MÀ THEO - Cách để nhanh chóng trở nên thành công: học hỏi từ người đã thành công 6.</div>
+                        <div class="story-line">XÁC ĐỊNH MỤC TIÊU - Xác định mình muốn đạt được những gì ở mỗi cột mốc quan trọng.</div>
+                        <div class="story-line">Ví dụ, bạn muốn năm 30 tuổi sẽ sở hữu một dây chuyền sản xuất doanh nghiệp, 40 tuổi có ít nhất 3 cơ sở kinh doanh.</div>
+                        <div class="story-line">Khi mục tiêu được nêu ra rõ ràng, bạn sẽ nhìn thấy đường đi chứ không còn luẩn quẩn trong sương mù 7.</div>
+                        <div class="story-line">Luôn nhớ rằng bạn không bao giờ là quá sớm để bắt đầu - Cuộc sống là rất ngắn, đừng lãng phí sức lực và “lửa” tuổi trẻ, hãy bắt đầu ngay hôm nay 8.</div>
+                        <div class="story-line">Học đầu tư - Gốc rễ của sự giàu có là đầu tư đúng đắn.</div>
+                        <div class="story-line">Hãy tìm hiểu và học hỏi bí quyết đầu tư của các nhà triệu phú để lựa chọn phương pháp phù hợp với mình ngay từ bây giờ.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Đào tạo quản lý">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Đào tạo quản lý</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">1.</div>
+                        <div class="story-line">Hiện tại, anh cũng đang đào tạo một người để sau này làm giám đốc nhà máy của SunGroup.</div>
+                        <div class="story-line">Khi nhà máy ổn định rồi, anh sẽ để em ấy toàn quyền quản lý mọi công việc trong xưởng.</div>
+                        <div class="story-line">Người này hiện đang là trưởng phòng kinh doanh của anh, đã theo anh nhiều năm.</div>
+                        <div class="story-line">Trong thời gian dịch bệnh ở Vũ Hán, em ấy luôn ở bên anh, không rời bỏ công ty, luôn ủng hộ anh hết mình.</div>
+                        <div class="story-line">Vì vậy, anh rất tin tưởng em ấy.</div>
+                        <div class="story-line">Sau này, khi có em ấy giúp anh quản lý nhà máy, anh sẽ yên tâm hơn.</div>
+                        <div class="story-line">Đến lúc đó, anh sẽ có thời gian dành cho gia đình và làm những việc mà mình yêu thích.</div>
+                        <div class="story-line">2 Hiện tại, nhà máy SunGroup cũng xem như đã dần ổn định.</div>
+                        <div class="story-line">Trước đây, vào thời điểm dịch bệnh ở Vũ Hán, anh suýt chút nữa thì phá sản.</div>
+                        <div class="story-line">Giá gỗ tăng cao, nhiều khi còn không mua nổi nguyên liệu.</div>
+                        <div class="story-line">Hải quan kiểm tra gắt gao, nhiều đơn hàng của khách bị huỷ, nội thất sản xuất xong không thể xuất đi, chất đống trong kho.</div>
+                        <div class="story-line">Thời gian đó thật sự khủng khiếp.</div>
+                        <div class="story-line">Mỗi ngày anh không ngủ được, trong lòng luôn lo lắng, chỉ nghĩ: “Ngày mai phải làm gì để công ty không sụp đổ?” 3 Trước đây, nhà máy SunGroup của anh chủ yếu dựa vào khách hàng ở các thành phố lân cận.</div>
+                        <div class="story-line">Rất nhiều trong số đó là bạn bè giới thiệu nhau đến đặt hàng nội thất.</div>
+                        <div class="story-line">Đặc biệt là một số người làm trong chính phủ, họ rất thích đặt nội thất gỗ đỏ cao cấp theo yêu cầu riêng.</div>
+                        <div class="story-line">Nhưng hiện tại, thị trường nội thất gỗ đỏ đang rất ảm đạm.</div>
+                        <div class="story-line">Tình hình kinh tế chung không tốt, nhiều người giảm mạnh chi tiêu, khiến nhu cầu mua sắm nội thất xa xỉ cũng giảm theo.</div>
+                        <div class="story-line">4 Vì vậy, bây giờ anh đang chuẩn bị chuyển đổi mô hình kinh doanh cho SunGroup.</div>
+                        <div class="story-line">Anh dự định mở rộng thị trường ra toàn quốc, không thể mãi chỉ tập trung vào vài thành phố lân cận nữa.</div>
+                        <div class="story-line">Trước đây, anh ngại chi phí logistics và nhân công, nên chỉ làm bán hàng trực tiếp (offline).</div>
+                        <div class="story-line">Nhưng bây giờ, anh muốn phát triển thêm kênh online, phải đi theo xu hướng của Internet.</div>
+                        <div class="story-line">Anh thấy bây giờ nhiều người kinh doanh rất tốt trên TikTok.</div>
+                        <div class="story-line">Anh có một người bạn đang làm trong mảng vận hành online, nên anh định hợp tác với em ấy để xây dựng một hệ thống bán hàng kết hợp online và offline cho SunGroup.</div>
+                        <div class="story-line">Tất nhiên, làm như vậy anh phải cắt giảm một phần lợi nhuận để bù chi phí marketing và vận hành.</div>
+                        <div class="story-line">Nhưng anh dự định chuyển sang sản xuất hàng loạt, bán sỉ với số lượng lớn, phát triển hệ thống đại lý toàn quốc.</div>
+                        <div class="story-line">Chỉ cần sản lượng bán ra đủ lớn, thì SunGroup vẫn có thể tăng doanh thu mạnh và giữ vững lợi nhuận.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Đau răng">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Đau răng</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Dạo gần đây anh thức đêm nhiều quá.</div>
+                        <div class="story-line">Sáng nay khi đánh răng, anh bị chảy máu lợi.</div>
+                        <div class="story-line">Vừa mới xoa hai cái, anh đã ngửi thấy trong miệng có mùi tanh nhạt, rồi nhổ bọt ra thì thấy có chút màu máu hồng.</div>
+                        <div class="story-line">Anh nhìn vào gương, thấy lợi sưng nhẹ, dùng lưỡi chạm vào thì cảm giác hơi đau.</div>
+                        <div class="story-line">Lúc đó anh cũng không hiểu chuyện gì đang xảy ra.</div>
+                        <div class="story-line">Anh nghĩ có thể là do thức khuya liên tục, căng thẳng nhiều, nên lợi bị viêm.</div>
+                        <div class="story-line">Anh tra trên điện thoại thì thấy có nhiều nguyên nhân nào là viêm lợi, bệnh nha chu, răng lung lay, nặng thì còn có thể rụng răng.</div>
+                        <div class="story-line">Sau khi họp xong ở công ty, anh đi bệnh viện kiểm tra.</div>
+                        <div class="story-line">Bác sĩ bảo không có gì nghiêm trọng, chỉ là do thiếu ngủ, căng thẳng quá độ, làm hệ miễn dịch suy giảm, dẫn đến viêm lợi và chảy máu.</div>
+                        <div class="story-line">Bác sĩ cũng dặn anh ít thức khuya hơn, đừng để đầu óc căng thẳng quá.</div>
+                        <div class="story-line">Nghe thì đơn giản, nhưng anh nghĩ trong lòng: Anh đâu có muốn thức khuya hay căng thẳng.</div>
+                        <div class="story-line">Nhưng công ty giờ có mấy chục anh em tin tưởng anh, mỗi người đều có gia đình, có con nhỏ — hàng trăm cái miệng đang trông chờ vào SunGroup để sống.</div>
+                        <div class="story-line">Em nói xem, sao mà anh không có áp lực được? Mỗi sáng vừa mở mắt, chi phí vận hành công ty đã gần 1 tỷ đồng mỗi ngày — từ mặt bằng, nhân sự, đến máy móc, thiết bị.</div>
+                        <div class="story-line">Em bảo vậy, áp lực có lớn không? Thức khuya, làm việc đến khuya cũng chỉ vì muốn giải quyết vấn đề nhanh hơn, tìm thị trường tốt hơn, để giữ vững công ty và anh em cùng tiến lên.</div>
+                        <div class="story-line">Đôi khi anh cũng ước gì có thể nghỉ ngơi một chút, nhưng nhìn thấy bao nhiêu người còn đang nỗ lực, anh lại tự nhủ: “Cố thêm chút nữa, rồi mọi thứ sẽ ổn thôi.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Đầu tư 1">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Đầu tư 1</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Chiều nay anh sẽ đi thăm công ty của anh bạn Một lát nữa, anh sẽ qua công ty ông em một chuyến.</div>
+                        <div class="story-line">Ông em gọi anh đến để lấy tiền số tiền em mượn trước đây khi mới mở cửa hàng.</div>
+                        <div class="story-line">Lúc đó, vì ông em thiếu vốn, anh nói rõ là anh không cho vay, nhưng anh sẽ đầu tư và nhận một phần cổ phần trong công ty.</div>
+                        <div class="story-line">Khi nghe vậy, em đã cười và nói: “Công việc của anh ổn định như thế, mỗi tháng kiếm được không ít tiền, sao còn phải đầu tư vào mấy việc kinh doanh khác? Cứ làm tốt việc hiện tại là được rồi.” Anh hỏi lại: “Em còn nhớ tình hình công ty anh thời kỳ dịch bệnh không?” Khi đó, hải quan không thể nhập nguyên liệu gỗ, nhà máy thì buộc phải tạm ngừng hoạt động.</div>
+                        <div class="story-line">Anh đã thua lỗ nặng nề, nhà và xe đều đem cầm cố, còn anh thì chạy khắp nơi để vay tiền duy trì công ty.</div>
+                        <div class="story-line">Em biết rõ giai đoạn đó khổ thế nào.</div>
+                        <div class="story-line">Mỗi ngày anh thức dậy đều phải nghĩ cách xoay sở, tính toán từng đồng để trả nợ.</div>
+                        <div class="story-line">May mắn là khi ấy có chú giúp đỡ.</div>
+                        <div class="story-line">Nếu không, chắc bây giờ anh chỉ còn đi nhặt ve chai ngoài đường.</div>
+                        <div class="story-line">Chính vì đã trải qua những ngày tháng như thế, anh mới hiểu một điều: Không thể chỉ đầu tư vào một ngành duy nhất.</div>
+                        <div class="story-line">Không có ngành nghề nào ổn định mãi mãi.</div>
+                        <div class="story-line">Đó cũng là lý do anh chọn đầu tư vào nhiều lĩnh vực khác nhau.</div>
+                        <div class="story-line">Nếu hôm nay công ty chính gặp khó khăn, anh vẫn có thể lấy tiền từ chỗ khác để bù đắp.</div>
+                        <div class="story-line">Như vậy, rủi ro sẽ thấp hơn và áp lực cũng nhẹ đi rất nhiều.</div>
+                        <div class="story-line">Nói thẳng ra, đó chính là nguyên tắc “Đừng để tất cả trứng vào cùng một giỏ.” Nếu cái giỏ rơi xuống, tất cả trứng sẽ vỡ.</div>
+                        <div class="story-line">Nhưng nếu chia ra nhiều giỏ, dù có mất một cái, anh vẫn còn những cái khác để đứng vững.</div>
+                        <div class="story-line">Anh còn cười, nói với em rằng: “Đừng ngu ngốc thế, đừng chỉ biết dồn hết công sức vào một ngành.</div>
+                        <div class="story-line">Hãy học cách tìm cơ hội ở nhiều nơi khác, học cách giảm rủi ro cho chính mình.</div>
+                        <div class="story-line">Phải biết phân tán đầu tư, chứ đừng để cuộc sống của mình phụ thuộc vào một nguồn duy nhất.”.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Đầu tư 2">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Đầu tư 2</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">2.</div>
+                        <div class="story-line">Vừa tiễn xong gia đình em họ ra về Vào dịp Tết năm ngoái, em họ anh có nói với anh rằng công việc trong cơ quan nhà nước lương thấp quá, không đủ để nuôi bản thân và con cái.</div>
+                        <div class="story-line">Hai vợ chồng suốt ngày cãi nhau vì tiền, nên em hỏi anh có thể giúp nghĩ ra một công việc kinh doanh nào phù hợp không.</div>
+                        <div class="story-line">Lúc đó, anh nhớ đến nhà hàng mà bạn anh mới thuê.</div>
+                        <div class="story-line">Bạn có nói sẽ cho anh một ít cổ phần nếu anh đầu tư, hơn nữa lượng khách của nhà hàng cũng khá ổn.</div>
+                        <div class="story-line">Anh liền hỏi em họ có thể đầu tư bao nhiêu, để anh nhường phần cổ phần đó cho em, và để chồng em quản lý nhà hàng.</div>
+                        <div class="story-line">Hai vợ chồng bảo sẽ suy nghĩ thêm.</div>
+                        <div class="story-line">Anh nói luôn: “Nếu không phải vì em là em họ anh, anh thật sự không bao giờ khuyên em làm việc này.</div>
+                        <div class="story-line">Bạn anh tin tưởng anh, nên mới cho anh một ít cổ phần và mời anh đầu tư.</div>
+                        <div class="story-line">Nhưng vì Tết năm ngoái em nói với anh rằng kiếm tiền không đủ sống, có khi còn không dám bị bệnh vì chi phí điều trị cao, nên anh mới muốn giúp.” Anh nói rõ với em rằng: “Em cần cơ hội này hơn anh.</div>
+                        <div class="story-line">Nếu không phải người trong nhà, anh cũng chẳng dám nói như vậy đâu.</div>
+                        <div class="story-line">Nếu thua lỗ, anh sẽ chịu một nửa, còn nếu có lãi, thì toàn bộ lợi nhuận là của em.” Cuối cùng, hai vợ chồng em đã gom đủ 3 tỷ.</div>
+                        <div class="story-line">Chồng em đi quản lý nhà hàng, và bạn anh đã đồng ý cho họ 30% cổ phần.</div>
+                        <div class="story-line">Bây giờ, nhà hàng đã hoạt động được hơn một năm và rất ổn định.</div>
+                        <div class="story-line">Gần đây, em gọi điện mời anh đi ăn tối, nhưng anh từ chối.</div>
+                        <div class="story-line">Anh nói: “Không cần ăn uống gì đâu, chỉ cần hai vợ chồng em bớt cãi nhau là tốt rồi.” Em cười, nói rằng giờ hai người không còn cãi nhau vì tiền nữa.</div>
+                        <div class="story-line">Cuộc sống ổn định hơn, thậm chí còn đang tính đổi nhà.</div>
+                        <div class="story-line">Nghe vậy, anh thật sự mừng cho em.</div>
+                        <div class="story-line">Nếu hồi đó hai vợ chồng em từ bỏ, có lẽ bây giờ vẫn đang cãi nhau, hoặc tệ hơn, có thể đã chia tay chỉ vì tiền.</div>
+                        <div class="story-line">Bởi vì để duy trì một gia đình hạnh phúc, tiền thật sự rất quan trọng.</div>
+                        <div class="story-line">Thực ra, cơ hội luôn ở quanh chúng ta.</div>
+                        <div class="story-line">Chỉ cần dám bước ra và nắm bắt, thì cuộc sống sẽ dễ dàng hơn, tốt đẹp hơn.</div>
+                        <div class="story-line">Những người có cơ hội mà vì sợ hãi không dám thử, đến khi thấy người khác thành công thì mới hối hận, nhưng lúc đó thì đã quá muộn.</div>
+                        <div class="story-line">Cơ hội mất đi — sẽ không bao giờ quay lại.</div>
+                        <div class="story-line">Cuộc đời này không có nhiều cơ hội, muốn thành công, phải biết nắm bắt mọi cơ hội xung quanh mình.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Đưa con đi chơi">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Đưa con đi chơi</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Anh đang đưa con trai đi chơi cứ hôm nào được nghỉ là cu cậu lại thích bố đưa đi nhà sách và siêu thị để chơi Con chỉ thích mua chuyện và đồ dùng học tập thôi.</div>
+                        <div class="story-line">Anh đưa đi mua quần áo thì con lại bảo Quần áo con nhiều lắm, bố để tiền mua chuyện với đồ dùng học tập cho con Từ bé anh đã dạy con bé biết quý trọng đồng tiền nên trong đầu con bé không có khái niệm giàu hay nghèo con rất sợ bố không có tiền nên ít đòi hỏi lắm em Cứ bố với bà mua gì thì dùng đó thôi em.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Em tự ti quá">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Em tự ti quá</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Em à Anh thấy em tự ti về bản thân em nhiều quá Anh nói thật vẽ bên ngoài đâu thật sự là quan trọng đâu em Quan trọng là con người tính cách của em như thế nào Xem trọng vẽ bề ngoài làm gì chứ Bản thân mình như thế nào để cảm thấy tự tin và đẹp nhất là được Em có thể cho cho anh xin một tấm hình hiện tại được không Con người anh sống ngay thẳng tính anh có sao nói thế à Theo như anh hiểu được tính cách về bản thân em từ lúc chúng ta biết đến nhau cho đến bây giờ thì anh hiểu được đôi chút về em.</div>
+                        <div class="story-line">Con người của em một người phụ nữ chất chứa một chút tổn thương ở trong đó , bản thân mình thì em không nghĩ chỉ suy nghĩ cho người nhà người thân và người khác mà thôi Em là một người phụ nữ dễ bị làm tổn thương em à Vì có những lời nói em có thể suy nghĩ linh ting cứ cho đó là người ta suy nghĩ mình như thế Trành trộc lại mất ngủ này kia Vì mấy năm nay thời gian và thanh xuân và sức khỏe của em Đã nghĩ hết về cho gia đình , con cái , chồng con Nên em mới cảm thấy như thế Nếu em thử nghĩ về cho bản thân mình một chút Chăm chút cho bản thân một ít suy nghĩ nhiều về cho bản thân mình em à Thế vì sao anh không nghe em nói về điều này Vì em đã suy nghĩ cho gia đình con cái quên đi bản thân mình thích nhưng gì Mong muốn những gì em à Nên cuộc sống nhan sắc của em bắt đầu phai nhạt đi Anh nói như thế có đúng như bản thân của em hiện tại không? Em suy nghĩ rồi trả lời cho anh xem.</div>
+                        <div class="story-line">Việc gì cũng thế cái gì cũng phải nghĩ đến cho bản thân mình một chút Không phải việc gì cũng chỉ nghĩ đến cho người khá mãi được em biết không? Đừng việc gì cũng suy nghĩ cho người khác nhiều hơn bản thân mình Nếu bây giờ anh nói với em Anh không chỉ quan tâm đến em và anh còn quan tâm đến những thứ khác về em liệu em có tin anh không Từ ngày gặp em mỗi ngày chia sẽ cùng em vè công việc gia đình và anh cũng không biết từ bao giờ cứ không nói chuyện với em lại thấy cảm giác buồn bã Làm gì hay ở đâu thì hình ảnh của em cứ xuất hiện ở trong đầu anh Nói như thế nhưng anh biết như thế nào để cần đối.</div>
+                        <div class="story-line">Chứ không phải yêu em rồi anh chỉ ngập trong tình yêu Nhưng thời anh nói ra hoàn toàn sự đất Lúc mình được sinh ra ở thế giời này mình đã khóc nhiều rồi , được sống không phải để mình buồn , hận , đau khổ ...</div>
+                        <div class="story-line">Lin Fu 林福, [02/08/2025 11:06 SA] và mình cũng không thể tránh được nhưng chuyện này vì đấy là tạo hóa rồi Cuộc sống này còn nhiều điều tốt đẹp đang đợi mình , đang còn nhiều món ngon nhiều nơi đẹp và nhiều thứ đang diễn ra mình còn chưa được tận hưởng.</div>
+                        <div class="story-line">Và buồn cũng vậy vui cũng như thế không giải quyết được gì thì lại sao mình không vui cho lòng nó an yên.</div>
+                        <div class="story-line">Lời này anh nói với em Anh không muốn em phải chịu nhiều nhưng tổn thương mà người khác đã mang lại cho em Em hay đễ cho anh được bù đắp chăm sóc quan tâm và lo lắng cho em nhé Nếu em mệt rồi hay dựa vào anh anh sẽ mãi ở bên em những lúc em cần anh nhất Khoảng cách địa lý không phải điều chúng ta phải lo ngại em à Anh muốn dành tình yêu này cho em muốn được ở bên cạnh yêu em mọi lúc , không phải để em chịu nhưng tổn tương mà người khác đã mang lại cho em Dù chuyện như có thể đi chăng nữa người ta có đối xử với em như thế nào đi chăng nữa Anh sẽ bù đắp thương em gấp đôi như vậy Anh sẽ cố gắng bằng mọi giá chỉ được chăm sóc quan tâm lo lắng cho em Em tin anh nhé ❤️ Anh nói với em những lời này Có thể thời gian này em vẫn chưa tin tưởng anh anh vẫn cố gắng chứng minh cho em thấy nhé Anh không cần em phải giỏi giang và xinh đẹp anh không cần những điều đó Anh cần một người phụ nữ có thể hiểu cho anh , và có thể ở bên anh quảng đường còn lại em hiểu không Bản thân anh không quan trọng là em có giỏi giang những việc gì hay như thế nào Vì bản thân anh cũng có thể làm được em chỉ cần ở bên anh như thế là đủ rồi em à Hiện tại hay quá khứ nó cũng đâu có quan trọng đâu em Chỉ cần là em anh chỉ muốn được canh bên chăm sóc cho em quan tâm lo lắng cho em như thế là đủ rồi em à.</div>
+                        <div class="story-line">Anh hiểu em vẫn còn con cái em suy nghĩ cho con Em muốn con em có được hạnh phúc trọn vẹn không muốn con mình phải buồn phải suy nghĩ đến những chuyện này.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Giúp đỡ hàng xóm">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Giúp đỡ hàng xóm</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Vừa mới về từ bệnh viện.</div>
+                        <div class="story-line">Lúc nãy có người đập cửa nhà anh, làm anh giật mình.</div>
+                        <div class="story-line">Thấy dì Hạnh lo lắng nói rằng bác trai bị lên cơn động kinh, tình trạng khá nghiêm trọng.</div>
+                        <div class="story-line">Con trai hai người thì không có ở nhà, nghe vậy anh liền chạy qua nhà dì.</div>
+                        <div class="story-line">Vừa vào cửa đã thấy bác trai nằm dưới đất, toàn thân co giật, miệng sùi bọt mép.</div>
+                        <div class="story-line">Anh lập tức chạy tới ấn vào huyệt nhân trung nhưng không có phản ứng gì.</div>
+                        <div class="story-line">Lúc đó anh cũng không dám nghĩ nhiều, vội vàng đưa bác trai lên xe, phóng đến bệnh viện.</div>
+                        <div class="story-line">Suốt dọc đường, anh lo lắng vô cùng, sợ có chuyện gì nghiêm trọng.</div>
+                        <div class="story-line">May mắn là anh đưa đi kịp thời, bác sĩ sau khi cấp cứu thì bác trai không có vấn đề gì nghiêm trọng.</div>
+                        <div class="story-line">Nghe bác sĩ nói vậy, anh mới thở phào nhẹ nhõm, thật sự yên tâm.</div>
+                        <div class="story-line">Bác trai không sao là tốt rồi.</div>
+                        <div class="story-line">Bình thường bác cũng rất tốt với anh, hay chia sẻ với anh những món ăn mà bác tự nấu, mỗi khi không có ở nhà, bác cũng giúp anh trong coi dọn dẹp cửa nhà.</div>
+                        <div class="story-line">Có được một người hàng xóm như vậy thật là tốt.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="HỎi THĂM MẸ VỢ">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">HỎi THĂM MẸ VỢ</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="KỈ LUẬT BẢN THÂN">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">KỈ LUẬT BẢN THÂN</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Kiếm tiền 2">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Kiếm tiền 2</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Bạn vay tiền để chữa bệnh cho con gái Ôi… đôi khi con người thật kỳ lạ.</div>
+                        <div class="story-line">Phải đợi đến khi sự việc xảy ra rồi mới nhận ra những gì người khác nói là đúng.</div>
+                        <div class="story-line">Hôm nay, em gọi điện cho anh, nói muốn vay tiền.</div>
+                        <div class="story-line">Anh hỏi có chuyện gì vậy.</div>
+                        <div class="story-line">Em nói con gái bị bệnh, thực sự không còn cách nào khác nên mới nhờ anh giúp.</div>
+                        <div class="story-line">Nếu không thì cũng chẳng muốn làm phiền.</div>
+                        <div class="story-line">Anh hỏi con bé bị bệnh gì.</div>
+                        <div class="story-line">Em trả lời là bệnh bạch cầu, phát hiện từ năm 2023 và đang điều trị hóa trị.</div>
+                        <div class="story-line">Gia đình đã tốn không ít tiền, giờ nhà cửa cũng cầm cố, nợ nần chồng chất, thật sự không còn cách nào khác.</div>
+                        <div class="story-line">Nghe xong, anh im lặng một lúc rồi bảo: “Em gửi số tài khoản cho anh.” Anh chuyển tiền ngay.</div>
+                        <div class="story-line">Anh nói: “Số tiền này không phải anh cho em vay.</div>
+                        <div class="story-line">Anh gửi để em chữa bệnh cho con gái.</div>
+                        <div class="story-line">Nếu không đủ thì cứ nói, anh sẽ giúp thêm.</div>
+                        <div class="story-line">Dù sao đi nữa, anh cũng có tình cảm với con bé, từ nhỏ đã nhìn nó lớn lên.” Anh biết, em là người rất tốt, sống hiền lành, chân thành.</div>
+                        <div class="story-line">Chỉ có một điều không tốt — là em không mấy quan tâm đến tiền bạc.</div>
+                        <div class="story-line">Em luôn cho rằng cuộc sống mình ổn rồi, không cần cố gắng thêm nữa.</div>
+                        <div class="story-line">Khi anh mới bắt đầu khởi nghiệp, anh đã mời em cùng tham gia.</div>
+                        <div class="story-line">Anh đề nghị cho em 30% cổ phần.</div>
+                        <div class="story-line">Nhưng em từ chối.</div>
+                        <div class="story-line">Em nói: “Giờ cuộc sống ổn rồi, mở một cửa hàng nhỏ, mỗi ngày kiếm đủ ăn là được, không muốn làm gì vất vả nữa.” Anh từng khuyên em nhiều lần: “Hiện tại ổn, nhưng không ai biết ngày mai sẽ thế nào.</div>
+                        <div class="story-line">Khi thật sự cần tiền, em sẽ hiểu anh nói đúng.” Em chỉ cười: “Nếu cần tiền thì lúc đó sẽ tính.” Nghe vậy, anh cũng không nói thêm gì nữa.</div>
+                        <div class="story-line">Vì anh hiểu — đó là lựa chọn của em.</div>
+                        <div class="story-line">Nhưng bây giờ, chuyện đã xảy ra.</div>
+                        <div class="story-line">Con gái bị bệnh, em mới hiểu những gì anh từng nói là đúng.</div>
+                        <div class="story-line">Phải đợi đến khi cần tiền, em mới thấy hối hận vì không lo sớm.</div>
+                        <div class="story-line">Có một câu mà anh rất thích: “Con người ta không thể dạy nhau, chỉ khi sự việc xảy ra, họ mới thực sự hiểu.” Khi đó, họ mới nhận ra — người khác nói đúng.</div>
+                        <div class="story-line">Anh và em đều không phải người quá yêu tiền.</div>
+                        <div class="story-line">Nhưng kiếm tiền là để có sự an toàn cho bản thân, để khi biến cố xảy ra, mình còn có lựa chọn.</div>
+                        <div class="story-line">Tiền không mang lại hạnh phúc, nhưng thiếu tiền, đôi khi mất cả cơ hội để giữ hạnh phúc.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Kiếm tiền">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Kiếm tiền</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Biến cố bất ngờ trong gia đình nhân viên giúp em nhận ra tầm quan trọng của tiền bạc Vào lúc 1 giờ sáng hôm qua, anh nhận được một cuộc gọi từ em Nam, nhân viên đã làm việc ở công ty hơn 2 năm Công việc hằng ngày của em là làm theo những gì anh giao, không có nhiều tham vọng về thăng tiến hay kiếm tiền.</div>
+                        <div class="story-line">Em luôn sống một cuộc sống bình lặng, đơn giản.</div>
+                        <div class="story-line">Nhưng tối qua, em gọi cho anh, giọng run run nói rằng mẹ bị đột quỵ do bệnh tim, phải nhập viện và cần 200 triệu đồng tiền phẫu thuật.</div>
+                        <div class="story-line">Em và vợ mỗi tháng chỉ kiếm đủ sống, chưa bao giờ tiết kiệm, cũng không có kế hoạch cho tương lai.</div>
+                        <div class="story-line">Cứ kiếm được bao nhiêu thì tiêu bấy nhiêu, chỉ nghĩ “sống tốt cho hôm nay”, mà chẳng bao giờ nghĩ đến “ngày mai sẽ ra sao”.</div>
+                        <div class="story-line">Nghe xong, anh thật sự suy nghĩ.</div>
+                        <div class="story-line">Tại sao nhiều người không chịu chuẩn bị cho tương lai? Lúc nào cũng đợi đến khi biến cố xảy ra mới lâm vào cảnh bế tắc, không xoay xở nổi.</div>
+                        <div class="story-line">Anh nói với em: “Anh có thể cho em mượn tiền, nhưng với năng lực và tư duy hiện tại, khi nào em mới trả lại được số tiền này?” Em đáp: “Mỗi tháng em sẽ trả dần.</div>
+                        <div class="story-line">Tiền lương em sẽ gửi cho anh.” Anh hỏi tiếp: “Lương mỗi tháng của em là 15 triệu.</div>
+                        <div class="story-line">Nếu em đưa hết cho anh, vậy em và vợ con sống thế nào? Ăn uống ra sao?” Em im lặng một lúc rồi nói: “Vậy em phải làm sao hả anh? Em thật sự không còn ai để mượn nữa.” Anh thở dài: “Đây chính là hậu quả của việc em không có kế hoạch cho cuộc sống và tương lai.</div>
+                        <div class="story-line">Công việc không tiến bộ, tiền bạc không sử dụng hợp lý.</div>
+                        <div class="story-line">Gần 40 tuổi rồi mà vẫn sống kiểu hôm nay sống, mai tính sau.” Em cúi đầu, nhỏ giọng: “Em biết rồi, anh.</div>
+                        <div class="story-line">Sau này em sẽ cố gắng làm việc chăm chỉ hơn, và lên kế hoạch cho tương lai của mình.” Anh nói: “Nếu một người không biết nghĩ cho tương lai, thì khi gặp rủi ro hay biến cố, sẽ chẳng có khả năng để đối mặt.</div>
+                        <div class="story-line">Bây giờ, em mở danh bạ điện thoại ra, cố gắng vay từ tất cả những người có thể giúp.</div>
+                        <div class="story-line">Phần còn lại không đủ thì đến gặp anh.” Cuối cùng, em vay được 100 triệu từ bạn bè, người thân.</div>
+                        <div class="story-line">Số còn thiếu 100 triệu anh cho em mượn.</div>
+                        <div class="story-line">Khi cho vay, anh đặt ra một vài yêu cầu: 1.</div>
+                        <div class="story-line">Viết một kế hoạch cho tương lai.</div>
+                        <div class="story-line">Từ hôm nay, em phải viết rõ ràng mục tiêu công việc, cách em muốn phát triển, bao lâu nữa sẽ lên vị trí trưởng nhóm hay giám sát.</div>
+                        <div class="story-line">Ở công ty này, ai cũng có cơ hội thăng tiến, chỉ cần có ý chí.</div>
+                        <div class="story-line">2.</div>
+                        <div class="story-line">Lập kế hoạch chi tiêu hàng tháng.</div>
+                        <div class="story-line">Mỗi khi nhận lương, em phải biết phân bổ hợp lý — tiền sinh hoạt, tiết kiệm, học hỏi.</div>
+                        <div class="story-line">Đồng tiền phải sinh lời, phải mang lại giá trị, chứ không thể tiêu vào những thứ vô ích.</div>
+                        <div class="story-line">Qua câu chuyện này, anh chỉ muốn em hiểu một điều: Đừng chỉ sống cho hiện tại.</div>
+                        <div class="story-line">Khi đã có gia đình, có cha mẹ, con cái, vợ chồng — em phải biết nghĩ xa hơn.</div>
+                        <div class="story-line">Cuộc đời không ai tránh khỏi biến cố, nhưng nếu em có kế hoạch, có sự chuẩn bị, em sẽ không bị dồn vào đường cùng.</div>
+                        <div class="story-line">Tiền bạc không phải là tất cả, nhưng nếu không biết quản lý tiền bạc, thì ngay cả những người tốt cũng sẽ bị hoàn cảnh đẩy vào khó khăn.</div>
+                        <div class="story-line">Anh mong rằng từ hôm nay, em sẽ sống có kế hoạch hơn vì tương lai của chính em và những người em yêu thương.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Kiểm tra hợp đồng">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Kiểm tra hợp đồng</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Hôm nay, khi tôi đang ở văn phòng để kiểm tra lại một số hợp đồng quan trọng với khách hàng.</div>
+                        <div class="story-line">Bất ngờ có nhân viên chạy vào báo tin: một bạn trong đội kinh doanh vừa gặp sự cố.</div>
+                        <div class="story-line">Tôi vội vàng bỏ dở công việc, chạy nhanh xuống tầng để xem tình hình.</div>
+                        <div class="story-line">Thì ra, trong lúc in và đóng tài liệu hợp đồng, bạn ấy sơ ý để tay kẹt vào máy ép nhiệt.</div>
+                        <div class="story-line">Nhìn bàn tay bị bỏng đỏ rát, tôi cũng thấy sốt ruột thay.</div>
+                        <div class="story-line">Không chần chừ, tôi liền lấy ngay xe của mình, trực tiếp đưa bạn vào bệnh viện để kiểm tra.</div>
+                        <div class="story-line">Trên đường đi, tôi thấy gương mặt bạn nhăn nhó vì đau, trong lòng tôi xót xa vô cùng.</div>
+                        <div class="story-line">Tới bệnh viện, bác sĩ kết luận tay bạn bị bỏng nặng, cần phải điều trị và nghỉ dưỡng một thời gian.</div>
+                        <div class="story-line">Nghe vậy, bạn rưng rưng nói trong nước mắt: anh ơi, ở nhà em còn mẹ già và vợ mới sinh hơn 5 tháng… Bây giờ em nằm viện thì ai lo cho họ đây?”.</div>
+                        <div class="story-line">Lúc đó tôi nhìn thẳng vào bạn và nói: “Em cứ yên tâm điều trị, toàn bộ viện phí và chi phí chăm sóc gia đình, anh sẽ lo.</div>
+                        <div class="story-line">Mọi người làm việc với anh, anh xem như người trong nhà.</div>
+                        <div class="story-line">Em không phải lo lắng gì cả, chỉ cần tập trung dưỡng bệnh cho khỏe thôi.”.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Lắp đặt hệ thống">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Lắp đặt hệ thống</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Sáng hôm qua, tôi cùng Ban điều hành đã họp và quyết định đầu tư nâng cấp hệ thống phòng cháy chữa cháy cho toàn bộ khu vực văn phòng Sun Group.</div>
+                        <div class="story-line">Đây là hệ thống điều khiển tổng, bao gồm cảm biến khói và hệ thống phun nước tự động, được lắp đặt tại những khu vực trọng yếu.</div>
+                        <div class="story-line">Môi trường văn phòng tuy không nhiều bụi gỗ hay hóa chất như nhà máy, nhưng vẫn tiềm ẩn những rủi ro từ hệ thống điện, thiết bị công nghệ và kho lưu trữ tài liệu.</div>
+                        <div class="story-line">Chính vì vậy, việc lắp đặt không phải vì đã từng xảy ra cháy, mà là sự chủ động bảo vệ con người, tài sản và uy tín của công ty.</div>
+                        <div class="story-line">Song song với đó, chúng tôi cũng tổ chức tập huấn PCCC định kỳ cho toàn bộ nhân viên văn phòng, để mỗi người đều nắm được kỹ năng xử lý khi có sự cố.</div>
+                        <div class="story-line">Với tôi, quan trọng nhất là tạo được một môi trường làm việc an toàn, vững tin, để mỗi ngày anh em bước vào văn phòng đều cảm thấy yên tâm và có thêm động lực làm việc..</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Năng lực 1">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Năng lực 1</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Hôm nay gặp một người bạn suýt đóng cửa công ty vì kinh doanh không thuận lợi, tôi đã phân tích vấn đề và tìm ra giải pháp giúp anh ấy Chiều nay, anh đang ngồi uống trà với một khách hàng ở một quán cà phê.</div>
+                        <div class="story-line">Khi chuẩn bị ra ngoài, anh nhìn thấy em một người bạn quen đã lâu đang ngồi với một quản lý ngân hàng bàn công việc.</div>
+                        <div class="story-line">Khi nhìn thấy anh, anh nhận ra vẻ mặt em không được tốt, có vẻ như cuộc trò chuyện không diễn ra suôn sẻ.</div>
+                        <div class="story-line">Khi tiễn khách xong, anh quay lại quán, ngồi không xa chỗ em, nghĩ rằng đã gặp nhau rồi thì ngồi chờ một lát.</div>
+                        <div class="story-line">Anh gọi thêm một ly cà phê và đợi.</div>
+                        <div class="story-line">Khoảng 20 phút sau, cuộc trò chuyện giữa em và quản lý ngân hàng kết thúc.</div>
+                        <div class="story-line">Em tiễn người đó đi rồi đến ngồi đối diện với anh.</div>
+                        <div class="story-line">Em cười gượng gạo và nói: “Lâu không gặp, dạo này anh thế nào?” Anh đáp: “Cũng được.</div>
+                        <div class="story-line">Còn em thì sao? Nãy anh thấy lúc em nói chuyện với người kia có vẻ không ổn lắm.” Em thở dài rồi nói: “Gần đây công ty em gặp phải một số vấn đề.</div>
+                        <div class="story-line">Tháng trước, nhân viên bán hàng của em ký được một đơn hàng từ Thái Lan.</div>
+                        <div class="story-line">Theo thỏa thuận, đối tác thanh toán một nửa trước, phần còn lại khi giao hàng.</div>
+                        <div class="story-line">Đơn hàng trị giá một triệu đô la.</div>
+                        <div class="story-line">Đối tác đã thanh toán một nửa, nhưng em vẫn phải ứng trước 30% nữa.</div>
+                        <div class="story-line">Do hai bên đã hợp tác hơn hai năm nên em chủ quan, đồng ý cho họ thanh toán chậm hơn.</div>
+                        <div class="story-line">Nhưng tuần trước, khi chuẩn bị giao hàng, họ gửi email nói rằng công ty gặp vấn đề dòng tiền, không thể thanh toán phần còn lại.</div>
+                        <div class="story-line">Điều này khiến công ty em bị động hoàn toàn.</div>
+                        <div class="story-line">Hàng hóa phụ kiện kim loại thì cầm cố nhiều, mà chưa bán được thì chỉ như đống sắt vụn.” Nghe đến đây, anh đã hiểu sơ tình hình.</div>
+                        <div class="story-line">Anh hỏi: “Vậy người em ngồi cùng lúc nãy là nhân viên ngân hàng đúng không? Em đang tìm cách vay vốn à?” Em gật đầu: “Đúng rồi.</div>
+                        <div class="story-line">Em cần vay 12 tỷ để duy trì công ty, nhưng họ không chấp nhận hàng hóa làm tài sản thế chấp.</div>
+                        <div class="story-line">Họ nói hàng này đặt riêng, khó bán lại.</div>
+                        <div class="story-line">Mà đối tác không thanh toán thì em cũng chẳng giao hàng được.” Anh suy nghĩ một chút rồi hỏi: “Vậy nếu ngân hàng không cho vay, đối tác không thanh toán, hàng hóa vẫn nằm đó, em có kế hoạch gì khác không?” Em cười gượng: “Nếu không xoay được, chắc em phải bán nhà, bán xe thôi.” Thấy sự bất lực trong lời nói của em, anh nói: “Anh hiểu rồi.</div>
+                        <div class="story-line">Cho anh góp một ý kiến, chỉ là quan điểm cá nhân thôi, em tham khảo nhé.</div>
+                        <div class="story-line">Giờ hàng hóa chưa bán được, ngân hàng không cho vay, nhưng em quên rằng em và đối tác đã hợp tác hơn hai năm.</div>
+                        <div class="story-line">Sao không thử ngồi lại, cùng họ vượt khó? Ví dụ, em có thể giao một phần hàng để họ bán, thu được tiền thì thanh toán dần.</div>
+                        <div class="story-line">Như vậy vừa giúp họ, vừa giảm áp lực tài chính của em.</div>
+                        <div class="story-line">Đồng thời, em có thể tạm thời thế chấp nhà ngắn hạn, hai hướng này kết hợp lại sẽ giúp công ty duy trì được hoạt động.</div>
+                        <div class="story-line">Khi có đơn hàng mới, có sẵn hàng trong kho thì cứ bán, dòng tiền sẽ quay lại.” Nghe xong, em vỗ trán cười: “Đúng rồi, sao em không nghĩ ra nhỉ.</div>
+                        <div class="story-line">Đúng là lúc rối quá chẳng còn tỉnh táo để nhìn vấn đề.” Anh rót cho em một tách trà, em uống một ngụm rồi nói: “Em sẽ về công ty suy nghĩ kỹ hơn, ngày mai mời anh ăn cơm nhé.” Thấy em từ nét mặt thất vọng chuyển sang có hy vọng, anh cũng thấy nhẹ lòng.</div>
+                        <div class="story-line">Thực ra, em vốn là người thông minh và điềm tĩnh, nhưng trong lúc khó khăn, ai cũng có thể rối trí.</div>
+                        <div class="story-line">Qua câu chuyện hôm nay, anh cũng rút ra một bài học: Khi gặp khó khăn, đừng vội vàng hành động.</div>
+                        <div class="story-line">Khi đầu óc rối bời, càng phải bình tĩnh.</div>
+                        <div class="story-line">Phải suy nghĩ kỹ, phân tích rõ tình huống, mới có thể tìm ra giải pháp đúng đắn.</div>
+                        <div class="story-line">Vội vã chỉ khiến mọi thứ tệ hơn mà thôi.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Năng lực 2">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Năng lực 2</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Sáng nay, anh có cuộc họp với đội ngũ quản lý Anh hỏi mọi người mở một công ty cần những gì?” Các em trả lời: “Cần quản lý, tài chính, hậu cần, bảo vệ, cô lao công, nhân viên bán hàng, đối tác, thiết bị, nguyên liệu, nhân viên, địa điểm…” Anh lại hỏi: “Cuối cùng ai là người thực hiện tất cả những công việc này?” Không ai trả lời được.</div>
+                        <div class="story-line">Anh nói thẳng: “Tất cả những thứ chúng ta chuẩn bị đều là vì nhân viên.</div>
+                        <div class="story-line">Khi nhân viên cần hoàn thành công việc, chúng ta phải chuẩn bị mọi thứ cho họ.</div>
+                        <div class="story-line">Nói cách khác, nhân viên mới là quan trọng nhất.</div>
+                        <div class="story-line">Không có nhân viên thì không có quản lý.</div>
+                        <div class="story-line">Không có quản lý thì không có công ty.</div>
+                        <div class="story-line">Không có công ty thì hôm nay chúng ta cũng không ngồi lại với nhau được.” Chúng ta ai cũng biết nhân viên quan trọng.</div>
+                        <div class="story-line">Nhưng làm thế nào để nhân viên làm theo yêu cầu của mình? Ví dụ như làm thêm giờ, học hỏi thêm, hay làm việc nghiêm túc.</div>
+                        <div class="story-line">Đó là điều mà chúng ta — những người quản lý — cần phải hiểu.</div>
+                        <div class="story-line">Nếu nhân viên không công nhận anh, tại sao họ phải nghe lời anh? Tại sao phải làm theo những gì anh nói? Họ có thể làm vì anh là quản lý, vì anh nhận lương từ công ty.</div>
+                        <div class="story-line">Nhưng liệu họ có làm hết lòng, làm tốt công việc không? Công ty mình làm nghề thủ công, chứ không phải vận hành bằng máy móc.</div>
+                        <div class="story-line">Vậy làm sao để nhân viên công nhận anh? Tại sao các em lại công nhận anh, lại nghe anh nói và làm bằng cả tâm huyết? Khi đại dịch xảy ra, công ty không thể trả lương, nhưng các em vẫn đồng hành cùng anh vượt qua khó khăn.</div>
+                        <div class="story-line">Anh hỏi thật, các em còn nhớ không — khi mới vào công ty, việc đầu tiên anh làm là gì? Việc đầu tiên, anh quan tâm đến các em.</div>
+                        <div class="story-line">Anh hỏi: “Em ăn gì chưa? Có chỗ ở chưa? Nếu chưa có, công ty có nhà trọ, cứ đến ở.</div>
+                        <div class="story-line">Nếu chưa có cơm ăn, anh bảo hậu cần mua cho.</div>
+                        <div class="story-line">Nếu chưa có chăn, bàn chải, vật dụng sinh hoạt, anh bảo chuẩn bị hết.” Hai, ba ngày sau, anh vẫn hỏi tiếp: “Em thấy công ty thế nào? Có quen việc không? Có ai hướng dẫn tận tình không? Cơm ở nhà ăn có hợp không? Có ai bắt nạt em không? Nhà trọ có thoải mái không? Cần anh giúp gì thêm không?” Các em, những người quản lý hôm nay, có quên không? Anh đã bắt đầu từ sự quan tâm nhỏ nhất đến nhân viên.</div>
+                        <div class="story-line">Qua đó, anh phát hiện ưu điểm của từng người và công nhận, khen ngợi những ưu điểm ấy.</div>
+                        <div class="story-line">Làm quản lý không phải để soi khuyết điểm của người khác.</div>
+                        <div class="story-line">Thấy khuyết điểm thì ai cũng thấy được.</div>
+                        <div class="story-line">Nhưng tìm ra điểm mạnh và giúp người ta phát huy — đó mới là bản lĩnh của người quản lý.</div>
+                        <div class="story-line">Trong suốt những năm qua, ít ai khen ta làm đúng.</div>
+                        <div class="story-line">Phần lớn mọi người chỉ nói: “Bạn ngu vậy sao?” “Bạn làm thế được không?” “Bạn có hiểu không?” Chúng ta luôn bị chê bai.</div>
+                        <div class="story-line">Vậy mà công ty vẫn tồn tại, vẫn phát triển, dù qua đại dịch, dù gặp khó khăn.</div>
+                        <div class="story-line">Các em vẫn tin tưởng anh, vẫn đồng hành cùng anh.</div>
+                        <div class="story-line">Điều đó không phải ngẫu nhiên.</div>
+                        <div class="story-line">Đó là nhờ sự quan tâm thật lòng, từ những điều nhỏ nhất.</div>
+                        <div class="story-line">Nhờ vậy mọi người mới tin, mới theo, mới cùng nhau đi tiếp.</div>
+                        <div class="story-line">Mở một công ty không đơn giản như nhiều người nghĩ.</div>
+                        <div class="story-line">Không phải chỉ có tiền, có nền tảng, có nguồn lực là được.</div>
+                        <div class="story-line">Thứ quan trọng nhất chính là con người.</div>
+                        <div class="story-line">Nhân viên là người làm ra sản phẩm.</div>
+                        <div class="story-line">Là người giúp công ty kiếm tiền.</div>
+                        <div class="story-line">Không có nhân viên thì không có công ty.</div>
+                        <div class="story-line">Không có công ty thì không có quản lý.</div>
+                        <div class="story-line">Các em hãy nhớ điều này.</div>
+                        <div class="story-line">Nếu một ngày nào đó, em không còn coi nhân viên như gia đình, thì có lẽ cũng là lúc em nên rời khỏi công ty.</div>
+                        <div class="story-line">Thực ra, ai trong chúng ta cũng cần sự quan tâm và công nhận.</div>
+                        <div class="story-line">Vì ai cũng vất vả, ai cũng có nỗi lo riêng.</div>
+                        <div class="story-line">Người ta làm việc chăm chỉ là để chứng minh bản thân, để được thừa nhận.</div>
+                        <div class="story-line">Nếu chúng ta chỉ biết chỉ trích, cuối cùng người đó sẽ bỏ cuộc.</div>
+                        <div class="story-line">Giống như khi dạy con cái — Đừng chỉ nhìn vào lỗi, hãy nhìn vào điểm mạnh của con.</div>
+                        <div class="story-line">Khi con làm tốt, hãy khen ngợi.</div>
+                        <div class="story-line">Chỉ khi được công nhận, con mới duy trì và phát triển những điều tốt đẹp ấy.</div>
+                        <div class="story-line">Giống như hôm nay, em khen con biết dọn dẹp, con sẽ vui, và ngày mai lại tiếp tục dọn dẹp.</div>
+                        <div class="story-line">Bởi vì con cảm nhận được sự công nhận và tình thương từ em — cha mẹ.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="nhân viên cũ">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">nhân viên cũ</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">NHÂN VIÊN CŨ TỚI NHÀ CHƠI Hôm nay, tôi có một người bạn cũ ghé chơi, mang theo chút trà quê biếu.</div>
+                        <div class="story-line">Ngồi uống trà, bao kỷ niệm ùa về khiến tôi thật sự xúc động Người bạn này từng là nhân viên đầu tiên đồng hành cùng tôi từ những ngày khởi nghiệp.</div>
+                        <div class="story-line">Năm 2021, khi dịch bệnh bùng phát, công ty đối diện vô vàn khó khăn: hàng hóa không giao được, nguyên liệu gián đoạn, dòng tiền gần như cạn kiệt.</div>
+                        <div class="story-line">Dù vậy, tôi vẫn quyết giữ trọn tập thể, không sa thải bất kỳ ai.</div>
+                        <div class="story-line">Trong lúc khó khăn ấy, bạn tìm đến tôi, nói rằng có ít tiền để dành cưới vợ, giờ thấy công ty cần nên sẵn sàng mang cho tôi mượn.</div>
+                        <div class="story-line">Số tiền đó không lớn, nhưng với bạn, đó là tất cả.</div>
+                        <div class="story-line">Nghe những lời đó, tôi thật sự rưng rưng.</div>
+                        <div class="story-line">Cũng bởi tôi luôn coi nhân viên như người thân trong gia đình, nên khi gian nan, họ cũng không bỏ mình.</div>
+                        <div class="story-line">Sau này, khi công ty dần ổn định, bạn chọn về quê mở quán nhỏ với vợ.</div>
+                        <div class="story-line">Tôi cũng hỗ trợ lại một phần để bạn an tâm khởi nghiệp.</div>
+                        <div class="story-line">Giờ nhìn thấy vợ chồng bạn hạnh phúc, cuộc sống ổn định, tôi cảm thấy ấm lòng vô cùng.</div>
+                        <div class="story-line">Câu chuyện này nhắc nhở tôi: khi mình sống chân thành với người khác, thì họ cũng không phụ mình.</div>
+                        <div class="story-line">Bạn bè, đồng nghiệp thật sự quý giá chính là những người sẵn sàng ở bên khi mình khó khăn nhất.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="nhân viên quà quê">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">nhân viên quà quê</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">NHÂN VIÊN MANG QUÀ QUÊ Hôm nay đến công ty, tôi bất ngờ khi nhận được rất nhiều quà quê từ anh em đồng nghiệp.</div>
+                        <div class="story-line">Toàn những món dân dã tôi yêu thích: nào cóc, ổi, xoài… Tất cả đều tươi ngon, mộc mạc, mang trọn hương vị quê nhà.</div>
+                        <div class="story-line">Tôi mang những phần quà đó lên chia cho các bạn trong văn phòng cùng thưởng thức.</div>
+                        <div class="story-line">Không khí làm việc trở nên thật vui vẻ và gần gũi.</div>
+                        <div class="story-line">Khoảnh khắc giản dị ấy làm tôi thêm tin rằng: Sun Group không chỉ là nơi làm việc, mà còn là một ngôi nhà chung, nơi mọi người biết sẻ chia, yêu thương và gắn kết.</div>
+                        <div class="story-line">Khi đồng nghiệp đồng lòng, cùng nhau phấn đấu, thì tập thể chắc chắn sẽ vững mạnh hơn để chinh phục mọi mục tiêu.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Ở lại cùng nhân viên">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Ở lại cùng nhân viên</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Tối nay anh mới rảnh, lâu rồi mới ngồi lại ăn uống với anh em trong công ty.</div>
+                        <div class="story-line">Mấy đứa gặp là chọc liền sếp ơi, tưởng sếp quên tụi em luôn rồi! nghe vậy cũng mắc cười, mà thấy thương Thật ra, thời gian qua anh bận xoay sở dữ lắm thị trường giờ khó khăn, cạnh tranh nhiều, anh không thể để công ty đi sai đường.</div>
+                        <div class="story-line">Nhân viên thì làm việc thôi, còn anh là người gánh hết áp lực, phải tính trước, lo cho từng người một Vì tụi nó tin anh, tin công ty, thì anh phải xứng đáng với niềm tin đó Nhưng mà cũng phải có lúc nghỉ ngơi Tối nay anh dặn trước không bàn chuyện công việc, chỉ uống rượu, ăn vui vẻ thôi nhìn tụi nó cười giỡn, nói thiệt, anh thấy nhẹ lòng lắm Quản lý mà có anh em sát cánh, tin tưởng mình như vậy, còn gì bằng lúc tàn tiệc, mấy đứa nói nhỏ với anh sếp có gì cứ nói với tụi em, đừng gồng một mình, mình là gia đình mà nghe câu đó, anh thấy ấm lòng dữ lắm Thật ra ngay từ đầu, mỗi người vô công ty anh đều coi như người nhà Anh muốn tụi nó có một chỗ làm mà vui vẻ, kiếm được tiền, sống thoải mái Chứ công việc mà không có tình người, thì cực mấy cũng thấy mệt.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Phần mềm hỏng">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Phần mềm hỏng</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Hôm nay không biết vì sao mà hệ thống phần mềm quản lý dự án của văn phòng bỗng dưng gặp sự cố.</div>
+                        <div class="story-line">Buổi sáng mọi thứ vẫn vận hành bình thường, nhưng đến trưa, sau giờ ăn cơm, khi mở lại thì toàn bộ dữ liệu bị treo, không thể truy cập.</div>
+                        <div class="story-line">Trong khi đó, có một bộ hồ sơ quan trọng cần hoàn thiện gấp để kịp tiến độ cho khách hàng, mà phía đối tác thì đang liên tục hối thúc.</div>
+                        <div class="story-line">Ngay lập tức, tôi gọi đội kỹ thuật đến kiểm tra toàn bộ hệ thống.</div>
+                        <div class="story-line">Sau một hồi rà soát, họ mới phát hiện nguyên nhân: một đoạn cáp kết nối giữa máy chủ và bộ điều khiển trung tâm bị lỗi, dẫn đến toàn bộ phần mềm ngưng hoạt động.</div>
+                        <div class="story-line">Việc khắc phục không chỉ đơn giản là thay dây, mà phải lập trình và cấu hình lại toàn bộ hệ thống.</div>
+                        <div class="story-line">Công việc này rất phức tạp, vì hệ thống quản lý dữ liệu có tính bảo mật và độ chính xác cao, chỉ cần sai sót nhỏ cũng có thể ảnh hưởng đến toàn bộ tiến độ của dự án.</div>
+                        <div class="story-line">Đội kỹ thuật đã mất cả buổi chiều để kiểm tra, lập trình và hiệu chỉnh lại cho đúng chuẩn.</div>
+                        <div class="story-line">Tôi cũng không thể rời văn phòng, mà phải trực tiếp ở lại theo dõi, động viên mọi người cùng tăng ca cho đến khi khắc phục xong và kịp hoàn thiện hồ sơ gửi cho khách..</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Phụ nữ li hôn">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Phụ nữ li hôn</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Tiến đến hôn nhân với người phụ nữ đã từng có một đời chồng, người đàn ông có thể yên tâm về khả năng chăm sóc chồng con Vun vén gia đình có đầy đủ kinh nghiệm trong việc chăm sóc mọi người cũng như dung hòa các mối quan hệ trong gia đình Những kiến thức về hôn nhân sẽ khiến người chồng có thể hoàn toàn tin tưởng vào người phụ nữ của đời mình Yêu người phụ nữ một đời chồng: Khó khăn nhưng xứng đáng Một người phụ nữ một đời chồng,sẽ gặp rất nhiều khó khăn trong việc chinh phục trái tim đã tổn thương của người đó Quen người phụ nữ từng đổ vỡ khó hơn ai nghĩ Không vì một nhành hoa hồng mà làm những điều ai yêu cầu Không vì một lời yêu thương mà mang nửa phần đời còn lại Sẽ không vì nhận được một món quà mà nhảy cẫng lên sung sướng Nhưng sẽ yêu bằng một trái tim nhiệt thành và ấm áp nhất Sẽ không phải mất thời gian giải thích nghe quá nhiều về một vấn đề Không phải cố gắng tìm điểm chung của nhau Sẽ tự khắc hiểu và dung hòa tính cách của cả hai Có nhiều người nói yêu phụ nữ từng trải mất danh dự lắm Vì sẽ xài lại một món đồ cũ mà người khác đã vứt đi Nhưng yêu một người từng trải giúp anh trưởng thành hơn rất nhiều Trưởng thành ở đây cả về nhận thức và trách nhiệm của bản thân Khi yêu mới nhận ra giá trị đích thực của chuyện tình cảm Không xem đó là một trò đùa như trước kia Không còn quy chụp mọi người phụ nữ đều như nhau Khi yêu dù không được nhìn thấy người mình yêu làm nũng nhưng lại vô cùng khâm phục sự mạnh mẽ đó Thậm chí còn là chỗ dựa mỗi lần gặp nhiều khó khăn trong công việc Vẫn ở bên như vậy, không đòi danh phận, không đòi sự chung thủy nơi anh Dù mới hay cũ đều đáng được trân trọng Đáng được yêu thương và được người khác bảo vệ Nếu thanh xuân, quá khứ đã từng lầm lỡ từng chọn sai người tương lai vẫn có quyền được chọn lại được quyền có được hạnh phúc cho mình Sau ly hôn có quyền tìm cho mình một người chăm sóc thì phụ nữ cũng có thể làm điều đó Anh nghĩ những định kiến về phụ nữ một đời chồng nên được xóa bỏ Vì không ai muốn lấy chồng để rồi ly hôn, không ai muốn mang tiếng qua nhiều lần đò.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="PHỤ NỮ TỰ CHỦ">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">PHỤ NỮ TỰ CHỦ</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">PHỤ NỮ TỰ CHỦ KINH TẾ Tôi luôn tin rằng: không có chuyện đàn ông kiếm được tiền còn phụ nữ thì không.</div>
+                        <div class="story-line">Ở Sun Group, mỗi cá nhân đều có giá trị, và phụ nữ càng xứng đáng được trân trọng khi họ biết tự lập, tự chủ.</div>
+                        <div class="story-line">Có một nhân viên kế toán từng làm việc cùng tôi.</div>
+                        <div class="story-line">Cách đây 5 tháng, bạn ấy phải nghỉ việc vì chồng ghen tuông, nóng tính, bắt vợ ở nhà để mình “nuôi”.</div>
+                        <div class="story-line">Nhưng thực tế, khi không còn thu nhập riêng, bạn ấy rơi vào cảnh phụ thuộc hoàn toàn.</div>
+                        <div class="story-line">Ban đầu, chồng đưa tiền chi tiêu mỗi tháng, nhưng dần dần giảm bớt, rồi sa vào ăn nhậu, cá cược đỏ đen.</div>
+                        <div class="story-line">Đến lúc không còn lo được cho gia đình, anh ta quay sang chì chiết, xúc phạm, thậm chí có hành vi bạo lực.</div>
+                        <div class="story-line">Người phụ nữ từng độc lập, nay bị xem như “ăn bám” ngay trong chính ngôi nhà của mình.</div>
+                        <div class="story-line">Không chịu nổi sự bất công, bạn ấy đã quyết định rời bỏ cuộc sống ngột ngạt để quay lại làm việc.</div>
+                        <div class="story-line">Và lần trở lại này, bạn ấy đã khác: bản lĩnh hơn, kiên định hơn, quyết tâm làm chủ cuộc sống của mình.</div>
+                        <div class="story-line">Câu chuyện này nhắc nhở tất cả chúng ta rằng: 👉 Người phụ nữ muốn an toàn, phải có kế hoạch và tài chính riêng.</div>
+                        <div class="story-line">👉 Khi tự chủ, phụ nữ không chỉ bảo vệ được bản thân mà còn buộc người đàn ông phải tôn trọng mình.</div>
+                        <div class="story-line">Tại Sun Group, chúng tôi luôn đề cao giá trị con người – đặc biệt là sự tự chủ, độc lập và mạnh mẽ của người phụ nữ.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Rộng lượng">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Rộng lượng</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Sáng nay có xảy ra chút chuyện..</div>
+                        <div class="story-line">Sáng anh lái xe đi mua đồ ăn sáng.</div>
+                        <div class="story-line">Vì có chút vội, anh đậu xe bên lề đường, nghĩ là vào rồi ra ngay, chắc không có vấn đề gì.</div>
+                        <div class="story-line">Nhưng không ngờ, chỉ trong vài phút ngắn ngủi, sự việc đã xảy ra.</div>
+                        <div class="story-line">Lúc đó, anh nghe thấy một tiếng động rất lớn từ phía sau: "Bum!" Anh vội vàng nhìn ra, nhìn thấy một chiếc xe điện bị ngã bên cạnh xe anh, và một cụ ông đang từ từ bò dậy, xe điện của ông ngã xuống đất, còn xe anh thì có dấu vết bị xước.</div>
+                        <div class="story-line">Anh lập tức chạy lại, nhìn thấy cụ ông đang tựa vào xe điện, mặt có vẻ hơi tái.</div>
+                        <div class="story-line">Anh vội đỡ ông, lo lắng hỏi: "Ông ơi, ông có sao không?" Cụ ông vỗ vỗ áo, miễn cưỡng cười, bảo là không sao, chỉ là hơi mệt, không để ý phía trước nên mới va phải.</div>
+                        <div class="story-line">Anh nhìn qua xe mình, vết xước khá dài xe mà đem đi sửa chắc phải tốn không ít tiền.</div>
+                        <div class="story-line">Nhìn cụ ông đã lớn tuổi, cụ cũng nói là sáng nay dậy sớm, mang rau mình trồng ra chợ bán, nên khi đang đi xe, ông cảm thấy buồn ngủ, lúc đó cũng không tránh kịp.</div>
+                        <div class="story-line">Anh nghĩ, yêu cầu cụ đền tiền thì ông lấy gì mà đền.</div>
+                        <div class="story-line">Cũng thấy cụ không dễ dàng gì, anh thật sự không thể để ông chịu trách nhiệm.</div>
+                        <div class="story-line">Lúc đó, Anh cũng hỏi cụ ông có cảm thấy đau ở đâu không, nếu cảm thấy khó chịu thì nói anh đưa đi bệnh viện, cụ ông nói không sao, vậy nên anh cũng không nói gì nữa, chỉ dặn cụ mấy câu, đi xe cẩn thận, an toàn là trên hết, ông không sao thì tốt rồi, vậy ông đi đi, lái xe từ từ nhé, con cũng không cần bồi thường gì nữa.</div>
+                        <div class="story-line">Nhìn cụ ông đạp xe điện từ từ đi xa, anh cảm thấy nhẹ nhõm trong lòng.</div>
+                        <div class="story-line">Xe hỏng thì có thể sửa, nhưng nếu cụ ông bị thương thì hậu quả sẽ nghiêm trọng.</div>
+                        <div class="story-line">Nghĩ theo một cách khác, thiệt hại nhỏ này thật sự không đáng gì, quan trọng là người không sao.</div>
+                        <div class="story-line">Có lúc, một sự nhượng bộ nhỏ không chỉ giúp tránh được vấn đề mà còn có thể giải quyết vấn đề một cách tốt đẹp.</div>
+                        <div class="story-line">Trên đường đời, ai cũng sẽ gặp phải sự cố, cuộc sống đã khó khăn và mệt mỏi rồi, vì vậy hãy thêm chút thấu hiểu, cũng sẽ mang lại thêm cho chúng ta chút ấm áp.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="SÁCH RICH DAD">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">SÁCH RICH DAD</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Sau này">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Sau này</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Mà em sau này muốn tìm một người như thế nào ? Anh muốn sống với người mà cả 2 có đủ tình yêu thương mà bao dung lẫn nhau Anh cho rằng điều quan trọng nhất để hai người ở bên nhau là hợp nhau, điều quan trọng nhất là hợp nhau về tính cách, có tiếng nói chung trong tim họ có nhau và biết bao dung, thấu hiểu nhau Cuộc sống luôn tạo cho ta những áp lực nhưng khi về đến nhà có người ở bên cạnh có thể thấu hiểu và chia sẽ thì mọi mệt mỏi đều sẽ tan biến, mọi mối quan hệ đều có thể đi đến hẻm cụt nếu chúng ta không biết trân trọng và gìn giữ nêú có thể hãy để mọi thứ thật dung hòa mỗi ngày sẽ là một điều thú vị và niềm vui khác nhau thì cuộc sống hôn nhân gia đình dù là 10 năm hay 100 năm vẫn sẽ như ngày mới yêu đúng không em ? Tình yêu là thứ kết nối giữa hai vợ chồng và nó là sợi dây chính có thể hóa giải mọi thứ Tình yêu đích thực là khi chúng ta đặt người bạn đời của mình lên trên hết và cho đi mà không mong đợi bất kỳ sự đáp lại nào Tình yêu cũng giúp chúng ta chấp nhận con người thật của nhau, bỏ qua những sai sót và sẵn sàng tha thứ cho nhau khi một trong hai gặp vấn đề khó khăn Anh đọc rất nhiều sách về hôn nhân và gia đình để chuẩn bị cho mình một hành trang thật tốt để mong sau này gặp được đúng người đúng thời điểm sẽ được hạnh phúc trăm năm trọn nghĩa trọn tình với nhau Em cũng từng trải qua những mối tình không như ý và nhìn vào cuộc sống hôn nhân bây giờ em cũng hiểu được một phần nào phải không em ? Càng yêu nhau muốn gắn bó với nhau lâu dài Thì lại càng phải thẳng thật với nhau Như vậy mới biết mình sai ở đâu cần sửa ở đâu Một mối quan hệ tốt đẹp không phải tự nhiên mà có mà cần sự kiên nhẫn và hai người thực sự muốn ở bên nhau Yêu thương bản thân mình là khởi đầu của một mối tình trọn kiếp.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Sự cố photto shop">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Sự cố photto shop</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Hôm nay, khi anh xuống văn phòng xem anh em đang chuẩn bị hồ sơ hợp đồng cho khách, bất ngờ khu vực máy photocopy phát ra một tiếng bụp lớn từ hộp cấp điện gần đó Cả văn phòng lập tức tối sầm lại, đèn chập chờn rồi tắt hẳn.</div>
+                        <div class="story-line">Khói nhẹ bắt đầu bốc lên từ bảng điện khiến một số nhân viên hoảng hốt May mắn là đội kỹ thuật kịp thời chạy ra ngắt toàn bộ điện để tránh nguy cơ cháy nổ.</div>
+                        <div class="story-line">Anh em nhanh chóng di chuyển ra ngoài để đảm bảo an toàn Khi sự cố tạm thời được khống chế, đội kỹ thuật kiểm tra và phát hiện nguyên nhân một đoạn dây điện trong hệ thống máy photocopy đã bị cũ, hở, chạm vào vỏ kim loại Thêm vào đó, độ ẩm cao trong những ngày mưa khiến nguy cơ chập điện càng lớn.</div>
+                        <div class="story-line">Anh lập tức triệu tập đội kỹ thuật vào họp gấp Anh nhắc rõ: nhiệm vụ của bộ phận này là bảo trì, kiểm tra định kỳ để đảm bảo an toàn cho anh em văn phòng, vậy mà hôm nay lại để xảy ra tình trạng nghiêm trọng như thế Đây là tác phong thiếu cẩn trọng.</div>
+                        <div class="story-line">Anh yêu cầu từng người đứng trước tập thể nhận lỗi, xin lỗi vì đã để anh em văn phòng hoang mang Sau đó, ngay trong ngày, phải khắc phục triệt để, không được phép để xảy ra thêm sự cố tương tự Anh cũng nói thẳng quan điểm Trong công ty, dù là việc nhỏ nhất cũng phải cẩn thận.</div>
+                        <div class="story-line">Bởi tính mạng, sự an toàn của mỗi người không chỉ là chuyện cá nhân, mà còn ảnh hưởng đến cả tập thể Tôi không chấp nhận tình trạng này xảy ra lần thứ hai.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Tập thể dục">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Tập thể dục</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Dẫn vào câu chuyện: Anh chuẩn bị đi chạy bộ, xem hôm nay có thể phá kỷ lục của mình được không.</div>
+                        <div class="story-line">Lần trước anh chạy được 4km Trước đây có lần anh đang chạy bộ thì gặp Long, hai người trò chuyện vài câu, anh ấy liếc qua rồi hỏi anh sức lực thế nào, chúng ta so tài một chút nhé? Câu này rõ ràng là khiêu khích mà? Dù sao cũng không thể chịu thua được, nhưng dù anh chạy thế nào thì Long luôn ở phía trước một đoạn, cảm giác như sắp đuổi kịp được, nhưng cuối cùng anh không thể tiếp tục, mồ hôi ướt đẫm cả áo, đôi chân thì run lên.</div>
+                        <div class="story-line">Long chạy đến gần anh, hỏi anh: "Bình thường bạn chạy được bao xa?" Anh trả lời khoảng 3 km.</div>
+                        <div class="story-line">Lúc đó (anh xxx) nói: "Hôm nay bạn đã chạy được gần 4 km rồi." Lúc đó anh mới nhận ra, thì ra anh ấy cố tình rèn luyện anh.</div>
+                        <div class="story-line">Thực ra, việc nâng cao bản thân đôi khi cần có người giúp đỡ, nhưng bản thân cũng phải kiên trì.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Tình yêu là gì">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Tình yêu là gì</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Vì theo anh nghĩ tình yêu là nó xuất phát từ 2 phía 1 phần nữa là nếu mình yêu thương 1 ai đó thì mình cũng sẽ yêu luôn cái tính cách và thấu hiểu cho nhau đó mới là tình yêu Với anh nó đơn giản lắm chỉ cần mình cùng nhau cố gắng biết phấn đấu để nghĩ đến tương lai của 2 người Thật sự thời gian qua nói chuyện với em cũng không phải là thời gian dài.</div>
+                        <div class="story-line">Nhưng anh cảm nhận được từ em những điều ấm áp lắm, em biết sẻ chia, thấu hiểu, em biết quan tâm..</div>
+                        <div class="story-line">không biết sự quan tâm mà em dành cho anh là dành cho một người bạn hay như thế nào.</div>
+                        <div class="story-line">Nhưng những điều đơn giản như vậy thôi nó cũng làm cho anh vui, và mỗi ngày anh nghĩ về em, anh đều cảm thấy có động lực để làm việc, để cố gắng.</div>
+                        <div class="story-line">Tương lai anh không biết là mình sẽ như thế nào..</div>
+                        <div class="story-line">Nhưng hiện tại, đối với anh, em là niềm vui, là niềm hạnh phúc của anh.</div>
+                        <div class="story-line">Quá khứ của em đã từng trải qua tổn thương như thế nào, thì hiện tại, anh muốn bản thân anh sẽ là người bù đắp lại những tổn thương mà em đã từng phải gánh chịu..</div>
+                        <div class="story-line">Anh yêu em, thương em.</div>
+                        <div class="story-line">Tình cảm này anh dành cho em nó xuất phát từ đáy lòng anh..</div>
+                        <div class="story-line">Em có thể cho anh một cơ hội để được ở bên cạnh em, được lo lắng, chăm sóc cho em, được không, anh biết lời này nói ra em cũng rất khó đồng ý, nhưng đây là lời thật từng tận đấy lòng của anh.</div>
+                        <div class="story-line">Anh giành tình cảm cho em là qua cảm nhận của anh Anh cũng không biết là em cảm nhận được trái tim anh thế nào , tại vì tình yêu là đó là sự cảm nhận của 2 cá thể , chỉ 1 phía không thể nào tạo nên 1 cuộc trò chuyện , 1 nửa trái tim không thể nào tạo nên 1 tình yêu hoàn thiện Anh nghĩ trong mỗi chúng ta ai cũng sẽ được vui vẻ hạnh phúc và ai cũng sẽ tìm được lối đi tốt cho cuộc sống của mình , chỉ cần mình hướng theo hướng tích cực và luôn có niềm tin với cuộc sống thì cơ hội sẽ đến với chúng ta * Không ai sinh ra là người hoàn hảo cả nhưng mà 2 cá thể yêu thương nhau lấy từ trong đối phương những cái tốt nhỏ nhất của họ để làm cái hoàn hảo của 1 cá thể em ạ Anh không biết nói quá nhiều điều hoa mỹ.</div>
+                        <div class="story-line">Anh chỉ làm những điều mà con tim lý trí anh mách bảo , bờ vai anh không quá lớn nhưng đủ để em dựa vào , * Mà từ ngày gặp em mỗi ngày chia sẽ cùng em về công việc và gia đình và anh cũng không biết từ bao giờ cứ không được nói chuyện với em là thấy cảm giác buồn bã *Làm gì hay ở đâu thì hình ảnh của em cứ xuất hiện trong đầu anh * Nói thì là như thế nhưng anh biết như thế nào để cân đối.</div>
+                        <div class="story-line">Chứ không phải yêu em rồi anh chỉ ngập trong tình yêu * Không chỉ có con và gia đình đâu.</div>
+                        <div class="story-line">Ngoài gia đình ra thì còn có anh chị em bạn bè đồng nghiệp ...</div>
+                        <div class="story-line">Những người mà đến với anh chân thành thì anh đều luôn trân trọng Cuộc sống này chỉ có màu hồng thì nó không phải là cuộc đời nữa rồi .Đê mà nói thực tế thì ở cuộc đời này thì đều có đau , buồn.</div>
+                        <div class="story-line">Vui sướng , khổ ...</div>
+                        <div class="story-line">Còn người ai cũng sẽ trải qua những thăng trầm của cuộc sống Lúc mình được sinh ra ở thế giới này thì mình đã khóc nhiều rồi , được sống không phải để mình buồn , hận , đâu khổ ...</div>
+                        <div class="story-line">và mình cũng không thể tránh được những chuyện này vì đấy là tạo hóa rồi Nhưng phải làm sao để vượt qua được những nghịch cảnh đấy Cuộc sống còn nhiều điều tốt đẹp đang đợi mình , đang còn nhiều món ngon nhiều nơi đẹp và nhiều thứ đang diễn ra mình còn chưa được tận hưởng.</div>
+                        <div class="story-line">Và buồn cũng vậy vui cũng như thế không giải quyết được gì thì tại sao mình không vui cho lòng nó an yên Công việc của anh thì khá là bận nhưng anh hứa lúc rỗi việc em là người mà anh nghĩ đến và nhắn tin cho em đầu tiên.</div>
+                        <div class="story-line">Tình yêu vốn dĩ bản chất của nó là sự cảm nhận là bản năng của con người nên dù sớm hay muộn thì nhất định đến 1 lúc nào đẫy khi mùa xuân đã đến , khi hoa đã nở , khi tình yêu đã đến ,1 trái tim đã bị úa tàn từ thu đông năm cũ ,1 sự hóa đá mà giường như không thể nào hồi phục tự nhiên khi đấy lại bị cảm hóa bởi tình yêu tức thì biết là có thể đến muộn 1 tý nhưng trái tim này vẫn sẽ có 1 đối phù hợp nó hạnh phúc và loạn nhịp trở lại ,duyên kiếp thời gian đã định đoạt phải ở bên nhau có 1 rào cản nào cũng sẽ cùng nhau đồng hành và phá tan đi tất cả , sâu tận cuối con đường là hạnh phúc mà thôi * Đừng tìm 1 khuôn mặt đẹp hay 1 người hoàn hảo để yêu.</div>
+                        <div class="story-line">Hãy tìm 1 thứ hợp với bạn, tự khắc sẽ đẹp.</div>
+                        <div class="story-line">1 người tuy k đẹp nhưng họ biết lắng nghe, biết quan tâm, lo lắng và thấu hiểu mỗi khi mình buồn thì đó mới là 1 người hoàn hảo * Tất cả những yếu tố có thể để cuộc sống trở nên hạnh phúc hơn vẫn là do bản thân mình tạo ra, ai cũng chỉ có một cuộc đời để sống.</div>
+                        <div class="story-line">sống trong đau khổ vẫn phải sống hay là sống trong sự vui vẻ ta vẫn phải sống vậy tại sao không sống hết mình để có được một cuộc sống thật vui vẻ và hạnh phúc phải không em ? * Tình yêu đích thực không phải là đam mê nhất thời mà là yêu cả đời.</div>
+                        <div class="story-line">Tình yêu đích thực không phải là cùng nhau hưởng hạnh phúc mà là chuyện cùng nhau san sẻ mọi thứ.</div>
+                        <div class="story-line">Tình yêu chân chính có thể hạnh phúc lâu dài nhưng cũng có cô đơn lẻ loi, hòa hợp lâu sẽ không thấy mệt mỏi nhưng đừng vì những va chạm nhỏ tạo nên khoảng cách * Ở độ tuổi này rồi thì anh không còn lựa chọn hay đòi hỏi nữa em à, anh chỉ cần 1 người thực sự yêu thương mình và đi cùng mình ở đoạn đường còn lại, cần là cần tấm lòng chứ không phải là những thứ bên ngoài em à.</div>
+                        <div class="story-line">vì những thứ đó mình cũng không mang theo được * Tuy em không phải là người đầu tiên bước vào trái tim anh nhưng anh giám chắc chắn với em rằng " em là người cuối cùng ngự trị trong trái tim anh " Em à, tình yêu thật sự sẽ không có khoảng cách về tuổi tác..</div>
+                        <div class="story-line">không có khoảng cách về địa vị , nếu đưa lên bàn cân so sánh thì cả đơì này sẽ không tìm được tình bạn chân tình và tinh yêu đích thực..</div>
+                        <div class="story-line">e là người đầu tiên anh quen trên mạng vi a đã nói rồi..</div>
+                        <div class="story-line">Trên mạng anh sợ không không tìm hiểu được rõ về nhau Anh luôn yêu thương em với vô điều kiện và anh luôn đặt tình cảm anh dành cho em đi đầu.</div>
+                        <div class="story-line">Chắc chắn em là người anh yêu tiên mỗi bữa sáng nhưng anh sẽ cũng đặt em lên hàng đầu sau này anh và em về sống chung chúng ta có 1 nguồn kinh tế của 2 người anh không muốn người phụ nữ anh thương phải thua ai cả⚡️⚡️⚡️⚡️.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="TỔNG KẾT QUỸ PHÚC LỢI">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">TỔNG KẾT QUỸ PHÚC LỢI</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">TỔNG KẾT QUỸ PHÚC LỢI Cuối năm luôn là thời điểm bận rộn nhất.</div>
+                        <div class="story-line">Hôm nay, tôi dành trọn cả ngày để xem xét lại quỹ phúc lợi, rà soát toàn bộ các khoản hỗ trợ trong năm và thống kê những mục chi mà phòng ban Sun Group đã triển khai cho nhân viên.</div>
+                        <div class="story-line">Đây không chỉ là việc kiểm kê số liệu hay quyết toán tài chính, mà còn là bước nền quan trọng để tôi và anh em xây dựng kế hoạch phúc lợi mới cho năm tới — sao cho quyền lợi của mọi người được đảm bảo, hợp lý và ngày càng tốt hơn.</div>
+                        <div class="story-line">Trong lúc rà soát, chúng tôi đối chiếu từng chương trình: hỗ trợ khó khăn đột xuất, trợ cấp sinh nhật, du lịch, ốm đau, hiếu hỉ… Đồng thời lắng nghe ý kiến của anh em để xem mục nào cần bổ sung, mục nào nên điều chỉnh, và mục nào cần nâng cấp nhằm tạo động lực tinh thần cho đội ngũ.</div>
+                        <div class="story-line">Bên cạnh đó, tôi cũng thống nhất với bộ phận tài chính về quỹ thưởng Tết, các phần quà cuối năm và những chính sách tri ân dành cho tập thể đã đồng hành suốt 12 tháng qua.</div>
+                        <div class="story-line">Với tôi, phúc lợi không chỉ là con số — mà là cam kết về sự quan tâm, sự tôn trọng và môi trường làm việc mà Sun Group đang xây dựng.</div>
+                        <div class="story-line">Song song, tôi cũng yêu cầu rà soát quy trình phê duyệt, đảm bảo mọi chính sách đều minh bạch, rõ ràng và đến đúng người, đúng thời điểm.</div>
+                        <div class="story-line">Mọi khúc mắc trong năm phải được giải quyết dứt điểm để anh em yên tâm đón Tết.</div>
+                        <div class="story-line">Tôi quan niệm rằng: một doanh nghiệp mạnh là doanh nghiệp biết chăm lo cho người của mình.</div>
+                        <div class="story-line">Khi đội ngũ cảm thấy được ghi nhận và bảo vệ, họ sẽ sẵn sàng cống hiến hết mình cho những mục tiêu lớn hơn.</div>
+                        <div class="story-line">Khi mọi thứ đã được kiểm tra đầy đủ, báo cáo hoàn thiện và kế hoạch năm mới hoàn tất, chúng ta có thể bắt đầu chặng đường tiếp theo với tâm thế tự tin – đoàn kết – và đầy quyết tâm.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="trải qua">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">trải qua</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">TRẢI QUA THỜI GIAN Ngần ấy thời gian anh cũng không biết là mình đi đến như thanh xuân như bây giờ là phải hoc và trải qua bao nhiêu thăng trầm nữa đó em.</div>
+                        <div class="story-line">Nhưng đôi khi chúng ta bận rộn và vất vả một chút nhưng đổi lại là sự đủ đầy và con cái chúng ta sẽ vững vàng tương lai hơn thật nhiều.</div>
+                        <div class="story-line">Ai cũng nói đàn ông thì lo toan sự nghiệp và to thuyền lớn sóng ở bên ngoài.</div>
+                        <div class="story-line">Nhưng theo anh nghĩ thì mọi thứ nó cần hợp lý và tinh tế giữa xã hội này.</div>
+                        <div class="story-line">Những việc nhỏ nhặt và bình thường nhất để gìn giữ một hạnh phúc thì đàn ông bọn anh cần và nên biết làm và làm một cách thật tốt để một người phụ nữ tin tưởng, cảm nhận được sự an toàn và trọn vẹn sự tin tưởng.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="TỪ THIỆN">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">TỪ THIỆN</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">TỪ THIỆN BỆNH VIỆN Một buổi sáng trong bệnh viện.</div>
+                        <div class="story-line">Sáng nay, anh dậy sớm hơn thường lệ, xếp mấy thùng sữa Fami lên xe rồi chạy thẳng vào bệnh viện.</div>
+                        <div class="story-line">Chuyến này anh không đi một mình, đi cùng anh là mấy cô lớn tuổi ở hội từ thiện trong phường.</div>
+                        <div class="story-line">Các cô tuy già nhưng rất nhiệt tình, vui tính, làm anh thấy chuyến đi cũng nhẹ nhàng hơn nhiều.</div>
+                        <div class="story-line">Tới nơi, anh cùng mọi người chia nhau đi phát từng hộp sữa cho các cô chú đang nằm viện, chủ yếu là những người già, không có thân nhân chăm sóc, hoặc hoàn cảnh khó khăn.</div>
+                        <div class="story-line">Mỗi người một túi nhỏ: vài hộp sữa, cái bánh, cái khăn mặt.</div>
+                        <div class="story-line">Không nhiều, nhưng là tấm lòng.</div>
+                        <div class="story-line">Anh thấy có cụ nằm co ro một mình, hỏi ra mới biết cụ từ quê lên Sài Gòn khám bệnh, không có người thân đi theo, sống tạm ở gầm cầu thang bệnh viện cả tuần.</div>
+                        <div class="story-line">Nhận hộp sữa từ tay anh, cụ cười mà mắt ướt.</div>
+                        <div class="story-line">Anh đứng lặng đi vài giây.</div>
+                        <div class="story-line">Mình làm kinh doanh, quen với tính toán lời lỗ, nhưng những lúc như vậy, tự dưng mọi con số không còn quan trọng nữa.</div>
+                        <div class="story-line">Chuyến đi sáng nay kéo dài gần ba tiếng, không ồn ào, không hình ảnh rầm rộ, nhưng để lại trong anh nhiều suy nghĩ.</div>
+                        <div class="story-line">Làm giám đốc, anh nghĩ không chỉ là lo cho công ty, cho anh em công nhân có việc làm, mà còn phải sống sao cho có trách nhiệm với xã hội, nhất là với những người yếu thế.</div>
+                        <div class="story-line">Anh không kể chuyện này để ai khen.</div>
+                        <div class="story-line">Anh chỉ muốn anh em trong xưởng biết: nếu có điều kiện, mình hãy giúp.</div>
+                        <div class="story-line">Không cần nhiều.</div>
+                        <div class="story-line">Một hộp sữa, một lời hỏi han cũng đủ làm người khác ấm lòng.</div>
+                        <div class="story-line">Mỗi lần như vậy, anh thấy mình được tiếp thêm động lực để cố gắng làm ăn cho đàng hoàng.</div>
+                        <div class="story-line">Có tiền không phải để khoe, mà để dùng đúng chỗ, giúp đúng người.</div>
+                        <div class="story-line">Anh mong sau này nếu có dịp, mình sẽ tổ chức cho cả xưởng cùng đi.</div>
+                        <div class="story-line">Để anh em không chỉ làm ra sản phẩm tốt, mà còn sống với cái tâm tốt.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Tuấn vay 200 triệu">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Tuấn vay 200 triệu</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Không ai biết trước được điều gì sẽ xảy ra trong đời tai nạn hay bất ngờ Ngày hôm đó, Tuấn bạn thân của anh tìm đến và vay 200 triệu đồng Bố cậu ấy đột ngột bị đột quỵ, đang nằm trong phòng chăm sóc đặc biệt Chi phí điều trị quá lớn, chẳng mấy chốc đã cuốn sạch toàn bộ số tiền tiết kiệm của gia đình, mà vẫn còn thiếu nhiều Tuấn đã gõ cửa từng người họ hàng, vay mượn khắp nơi, nhưng vẫn không đủ Không còn cách nào khác, cậu ấy tìm đến tôi Không còn cách nào khác, cậu ấy tìm đến tôi Tôi gọi phòng tài chính đưa tiền cho cậu ấy, nhưng cũng nhất quyết bảo viết một tờ giấy vay nợ, vì tôi nghĩ dù thân mấy thì tiền bạc cũng nên rạch ròi Tay cậu ấy run rẩy khi viết, miệng thì nói Anh Khánh, em sẽ trả lại cho anh sớm nhất có thể Anh chỉ vỗ vai bảo Tuấn quay lại chăm sóc bác trai, còn tiền bạc thì đừng quá lo Bởi lẽ, nếu lúc này tôi không giúp thì chúng tôi còn là bạn bè kiểu gì nữa? Thật ra, trong lòng tôi chẳng bao giờ quên, ngày xưa gia đình tôi nghèo khó, chính bố Tuấn và cả Tuấn đã nhiều lần giúp đỡ Hễ có gì ngon hay tốt, họ đều san sẻ cho nhà tôi Tôi còn nhớ có lần tôi sốt mê man, chính Tuấn đã bế tôi chạy đến phòng khám tình cảm đó, tôi coi như nghĩa tình ruột thịt Sau khi Tuấn rời đi, tôi cầm tờ giấy nợ, bỗng thấy nghẹn ngào Nghĩ lại những gì gia đình cậu ấy từng giúp tôi, tôi đã xé tờ giấy ấy 200 triệu không phải số tiền nhỏ, nhưng với tôi, mối quan hệ anh em đáng quý hơn gấp nhiều lần Bởi khi hoạn nạn, người đưa tay ra đỡ mình, đó mới là một người anh em thật sự TỐI GỬI GIAO DỊCH RÚT TIỀN 200tr Đây nãy anh có rút để đưa tiền cho Tuấn.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Ứng lương 3 lần">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Ứng lương 3 lần</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Hôm nay anh tới công ty anh nghe bên bộ phận kế toán báo cô tạp vụ tháng này ứng lương 3 lần rồi Nghe được tin ấy anh đã đi hỏi cô ấy và biết được hoàn cảnh éo le của cô ấy Chồng cô ấy nghiện ngập và cờ bạc, bố cô ấy mới bị tai nạn giờ phải nằm nằm liệt giường cần tiên thuốc thang Con cần tiền đóng học, cái tệ nhất là chồng của cô ấy đã không đỡ đần được gì cho cô ấy rồi còn suốt ngày bắt cô ấy đưa tiền cô ấy không thì lại đánh đập Nên đối với hoàn cảnh của cô ấy anh sẽ hỗ trợ hết mình trong phạm vi có thể em à vì cuộc sống của cô ấy không hè dễ dàng gì 1 thân con gái phải gánh vác cả gia đình.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="Uống rượu với khách hàng">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">Uống rượu với khách hàng</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">Ở bên ngoài anh thấy một người đàn ông say rượu đang quát mắng một em gái, sau đó còn tát em ấy.</div>
+                        <div class="story-line">Anh đoán họ là người yêu nhau, nhưng dù thế nào đi nữa, việc động tay động chân là không thể chấp nhận được.</div>
+                        <div class="story-line">Đánh một em gái trước mặt nhiều người như vậy thật sự khiến anh không thể nhìn nổi.</div>
+                        <div class="story-line">Anh ta còn định đánh tiếp.</div>
+                        <div class="story-line">Ngay lúc đó anh lập tức xông lên, nắm lấy cánh tay hắn và nói: “Có chuyện gì thì nói chuyện tử tế, đừng động tay động chân đánh người.” Phụ nữ ngày nay đáng lẽ phải được tôn trọng, chứ không phải bị đánh hay mắng chửi.</div>
+                        <div class="story-line">Hành động của người đàn ông đó làm anh thấy hắn chẳng ra con người, hành xử như kẻ điên.</div>
+                        <div class="story-line">Sau khi người đàn ông ấy bỏ đi, anh mới biết họ là vợ chồng.</div>
+                        <div class="story-line">Hóa ra anh ta đã nhiều lần đánh đập em ấy, chỉ vì em ấy luôn nhẫn nhịn chịu đựng.</div>
+                        <div class="story-line">Nguyên do là sau khi kết hôn, người đàn ông dần chuyển toàn bộ tài sản sang tên mình.</div>
+                        <div class="story-line">Nếu em ấy rời đi, bao nhiêu năm nỗ lực của em sẽ coi như đổ sông đổ bể.</div>
+                        <div class="story-line">Vì vậy em ấy do dự và tiếp tục chịu đựng, bởi rời đi thì sẽ chẳng còn gì.</div>
+                        <div class="story-line">Chuyện gia đình người khác anh không tiện can thiệp sâu thêm.</div>
+                        <div class="story-line">Nhưng anh chỉ mong phụ nữ hãy học cách độc lập về kinh tế để tự bảo vệ mình.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="VẤN ĐỀ HÔN NHÂN">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">VẤN ĐỀ HÔN NHÂN</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">VẤN ĐỀ VỀ HÔN NHÂN Lời nói độc hại chỉ khiến người thân yêu ngày càng xa cách.</div>
+                        <div class="story-line">Vết thương cơ thể có thể chữa lành theo thời gian.</div>
+                        <div class="story-line">Những tổn thương do lời nói không dễ thấy lại đâm thấu tim.</div>
+                        <div class="story-line">Có thể đột ngột đánh gục một người,bạn phải hiểu rằng điều thực sự đưa một cuộc hôn nhân đến bờ vực đổ vỡ, thường không phải là hoàn cảnh gia đình mà là do những lời nói gây tổn thường tích tụ theo năm tháng.</div>
+                        <div class="story-line">GIA ĐÌNH CÃI VÃ.</div>
+                        <div class="story-line">Gia đình chúng ta không phải là nơi sinh ra để cãi đúng hay sai, cũng không phải là chiến trường phân thắng bại.</div>
+                        <div class="story-line">Yêu thương thì phải biết cách thể hiện.</div>
+                        <div class="story-line">Miệng của cha mẹ chính là số phận của con cái.</div>
+                        <div class="story-line">SỰ NGU DỐT.</div>
+                        <div class="story-line">Sự ngu dốt nhất của một gia đình là khi con cái bên ngoài không bị thế giới đánh bại mà bị hủy hoại chính miệng của cha mẹ; nói chuyện tốt, giao tiếp tốt là phong thủy tốt nhất của Gia đình.</div>
+                        <div class="story-line">Một gia đình đầy sự chỉ trích, trách móc, chì chiết lẫn nhau chắc chắn sẽ suy tàn.</div>
+                        <div class="story-line">Còn một gia đình hòa thuận dù nghèo khó cũng sẽ phát đạt.</div>
+                        <div class="story-line">GIA ĐÌNH HÒA THUẬN.</div>
+                        <div class="story-line">Gia đình hòa thuận thì Phước lành phúc sẽ tự đến.</div>
+                        <div class="story-line">Sự khích lệ, khen ngợi, động viên, tôn trọng,cổ vũ,của người yêu là động lực cho chúng ta bước tiếp không sợ hãi, Sự công nhận của cha mẹ là nền tảng để con cái vững bước trên đời.</div>
+                        <div class="story-line">GIAO TIẾP TỐT.</div>
+                        <div class="story-line">Vì vậy biết giao tiếp tốt, nói chuyện tốt là mưu lược quan trọng trong hôn nhân, không trách mắng chuyện lớn.</div>
+                        <div class="story-line">Không tranh cãi chuyện nhỏ, không nhắc lại chuyện cũ, không sợ do hơn thua như vậy gia đình ngày càng hạnh phúc, vợ chồng nồng ấm, gia đình tốt đẹp.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="story-item" data-story="vươn lên chính mình">
+                <div class="story-header" onclick="toggleStory(this)">
+                    <div class="story-title">vươn lên chính mình</div>
+                    <div class="story-toggle">▼</div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text">
+                        <div class="story-line">VƯƠN LÊN CHÍNH MÌNH Hãy nhớ kỹ: Dựa vào ai cũng không bằng dựa vào chính mình.</div>
+                        <div class="story-line">Con người vốn phức tạp và dễ thay lòng đổi dạ, đời này không có bến tựa vĩnh viễn.</div>
+                        <div class="story-line">Đừng đặt quá nhiều hy vọng vào người khác, ai cũng có nỗi khó riêng.</div>
+                        <div class="story-line">Bạn phải trở thành núi tựa của đời mình.</div>
+                        <div class="story-line">Những đoạn đường gian nan nhất, đều phải một mình bước đi.</div>
+                        <div class="story-line">Tủi thân tự nuốt vào trong, áp lực tự mình gồng gánh, tổn thương cũng tự mình hàn gắn.</div>
+                        <div class="story-line">Thật sự không ai thấu hiểu nỗi đau của ta, rốt cuộc mọi thứ vẫn phải tự mình đối mặt.</div>
+                        <div class="story-line">Dù phía trước tối tăm mịt mù, dù quá trình đầy chông gai, bạn vẫn phải một mình đi đến ngọn hải đăng trong tim.</div>
+                        <div class="story-line">Hãy không ngừng cứu lấy chính mình từ lửa đỏ nước sôi, từ vực sâu tuyệt vọng, bước ra nơi có ánh sáng.</div>
+                        <div class="story-line">Từ giờ phút này, hoa thơm dành tặng cho bản thân, phi ngựa hát ca tiến về phương xa.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 - Bộ sưu tập câu chuyện ý nghĩa | Tổng cộng: 47 câu chuyện</p>
+        </div>
+    </div>
+
+    <script>
+        // create decorative stars for background
+        function createStars() {
+            const container = document.getElementById('starsContainer');
+            if (!container) return;
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(star);
+            }
+        }
+        createStars();
+
+        function toggleStory(header) {
+            const storyItem = header.closest('.story-item');
+            
+            // Close all other stories
+            document.querySelectorAll('.story-item.active').forEach(item => {
+                if (item !== storyItem) {
+                    item.classList.remove('active');
+                }
+            });
+            
+            // Toggle current story
+            storyItem.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
