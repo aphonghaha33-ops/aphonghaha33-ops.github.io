@@ -1,0 +1,12 @@
+Hôm nay không biết vì sao mà hệ thống phần mềm quản lý dự án của văn phòng bỗng dưng gặp sự cố.
+Buổi sáng mọi thứ vẫn vận hành bình thường, nhưng đến trưa, sau giờ ăn cơm, khi mở lại thì toàn bộ dữ liệu bị treo, không thể truy cập.
+Trong khi đó, có một bộ hồ sơ quan trọng cần hoàn thiện gấp để kịp tiến độ cho khách hàng, mà phía đối tác thì đang liên tục hối thúc.
+
+Ngay lập tức, tôi gọi đội kỹ thuật đến kiểm tra toàn bộ hệ thống.
+Sau một hồi rà soát, họ mới phát hiện nguyên nhân: một đoạn cáp kết nối giữa máy chủ và bộ điều khiển trung tâm bị lỗi, dẫn đến toàn bộ phần mềm ngưng hoạt động.
+Việc khắc phục không chỉ đơn giản là thay dây, mà phải lập trình và cấu hình lại toàn bộ hệ thống.
+
+Công việc này rất phức tạp, vì hệ thống quản lý dữ liệu có tính bảo mật và độ chính xác cao, chỉ cần sai sót nhỏ cũng có thể ảnh hưởng đến toàn bộ tiến độ của dự án.
+Đội kỹ thuật đã mất cả buổi chiều để kiểm tra, lập trình và hiệu chỉnh lại cho đúng chuẩn.
+
+Tôi cũng không thể rời văn phòng, mà phải trực tiếp ở lại theo dõi, động viên mọi người cùng tăng ca cho đến khi khắc phục xong và kịp hoàn thiện hồ sơ gửi cho khách.

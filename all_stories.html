@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tổng Hợp — Câu Chuyện</title>
+  <style>
+    :root{
+      --bg:#0f1724;
+      --panel:#0b1220;
+      --card:#0f1724;
+      --accent:#60a5fa;
+      --muted:#94a3b8;
+      --glass: rgba(255,255,255,0.03);
+    }
+    html,body{height:100%;margin:0}
+    body{font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#071127 0%, #0b1220 60%);color:#e6eef8;padding:18px}
+    .wrap{max-width:1200px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    h1{margin:0;font-size:22px}
+    .controls{display:flex;gap:8px;align-items:center}
+    input[type="search"]{padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);width:280px;background:transparent;color:var(--muted)}
+    .topbar{position:sticky;top:12px;z-index:40;background:linear-gradient(180deg, rgba(11,17,34,0.55), rgba(11,17,34,0.25));backdrop-filter: blur(6px);padding:10px;border-radius:12px}
+    .layout{display:grid;grid-template-columns:260px 1fr;gap:18px;margin-top:14px}
+    nav{position:sticky;top:84px;height:calc(100vh - 120px);overflow:auto;padding:14px;border-radius:10px;background:var(--glass);box-shadow:0 6px 24px rgba(2,6,23,0.6)}
+    .toc a{display:block;padding:8px 6px;color:var(--muted);text-decoration:none;border-radius:6px}
+    .toc a:hover{background:rgba(255,255,255,0.02);color:var(--accent)}
+    main{overflow:auto}
+    section.story{margin-bottom:18px;padding:18px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 8px 30px rgba(2,6,23,0.5)}
+    section.story h2{margin:0 0 6px;color:#fff}
+    .meta{color:var(--muted);font-size:13px;margin-bottom:8px}
+    pre.content{white-space:pre-wrap;word-wrap:break-word;background:#071327;color:#e6eef8;padding:12px;border-radius:8px;overflow:auto;border:1px solid rgba(255,255,255,0.03)}
+    .controls .btn{background:var(--accent);color:#072035;border:0;padding:8px 10px;border-radius:8px;cursor:pointer}
+    .small-link{color:var(--accent);text-decoration:none;margin-left:8px}
+    .back-top{display:inline-block;margin-top:12px;color:var(--muted);cursor:pointer}
+    .tools{display:flex;gap:8px;align-items:center}
+    @media (max-width:900px){.layout{grid-template-columns:1fr}nav{position:relative;height:auto;top:0}}
+    .hidden{display:none !important}
+    .focused{outline:3px solid rgba(96,165,250,0.12);box-shadow:0 8px 30px rgba(96,165,250,0.06);}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <header>
+        <div>
+          <h1>Ăn cứt như thế nào để được thông minh</h1>
+          <div class="meta">@NguoiTaiKhongDoanhThu3</div>
+        </div>
+        <div class="controls">
+          <input id="q" type="search" placeholder="Mày ăn cút ngon không?có vị gì vậy?" />
+          <div class="tools">
+            <button id="reload" class="btn">Tải lại bộ não</button>
+            <button id="clear" class="btn">Biến</button>
+            <button id="showAll" class="btn" title="Hiện tất cả">Show hàng</button>
+            <button id="manageBtn" class="btn" title="Quản lý stories">Bấm là phải đi</button>
+          </div>
+        </div>
+      </header>
+      <div id="manager" style="display:none;margin-top:10px;padding:12px;border-radius:8px;background:rgba(255,255,255,0.02);">
+        <strong>Trình quản lý (thêm / xóa / xuất index)</strong>
+        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <input id="newName" placeholder="Tên file mới (ví dụ: Câu chuyện mới.txt)" style="flex:1;padding:8px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)" />
+          <input id="fileUpload" type="file" accept=".txt" />
+          <button id="addFileBtn" class="btn">Tạo & Tải xuống</button>
+          <button id="removeSelected" class="btn">Xóa mục chọn</button>
+          <button id="downloadIndex" class="btn">Tải index.json</button>
+          <button id="rebuildIndex" class="btn">Xây lại từ thư mục</button>
+        </div>
+        <div style="margin-top:10px;color:var(--muted);font-size:13px">Danh sách hiện thời (bấm để chọn nhiều):</div>
+        <div id="manageList" style="margin-top:8px;max-height:160px;overflow:auto;padding:8px;border-radius:6px;background:rgba(0,0,0,0.04)"></div>
+        <div style="margin-top:8px;color:var(--muted);font-size:13px">Lưu ý: trang này không thể trực tiếp ghi vào ổ cứng. Để chuyển thay đổi vào `stories/`, bạn có thể tải `index.json` và/hoặc tải file .txt được tạo rồi chạy `scripts\manage_stories.ps1` (ví dụ: <code>.\scripts\manage_stories.ps1 -AddPath "C:\path\to\file.txt"</code>).</div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <nav>
+        <strong>Danh sách câu chuyện</strong>
+        <div style="height:8px"></div>
+        <div class="toc" id="toc"></div>
+      </nav>
+
+      <main id="stories">
+
+      <section id="Sau này" class="story">
+        <h2>Sau này</h2>
+        <div class="meta">Tệp: Sau này.txt</div>
+        <pre class="content">Mà em sau này muốn tìm một người như thế nào ?
+
+Anh muốn sống với người mà cả 2 có đủ tình yêu thương mà bao dung lẫn nhau
+
+Anh cho rằng điều quan trọng nhất để hai người ở bên nhau là hợp nhau, điều quan trọng nhất là hợp nhau về tính cách, có tiếng nói chung trong tim họ có nhau và biết bao dung, thấu hiểu nhau
+
+Cuộc sống luôn tạo cho ta những áp lực nhưng khi về đến nhà có người ở bên cạnh có thể thấu hiểu và chia sẽ thì mọi mệt mỏi đều sẽ tan biến, mọi mối quan hệ đều có thể đi đến hẻm cụt nếu chúng ta không biết trân trọng và gìn giữ nêú có thể hãy để mọi thứ thật dung hòa mỗi ngày sẽ là một điều thú vị và niềm vui khác nhau thì cuộc sống hôn nhân gia đình dù là 10 năm hay 100 năm vẫn sẽ như ngày mới yêu đúng không em ? 
+
+Tình yêu là thứ kết nối giữa hai vợ chồng và nó là sợi dây chính có thể hóa giải mọi thứ
+
+Tình yêu đích thực là khi chúng ta đặt người bạn đời của mình lên trên hết và cho đi mà không mong đợi bất kỳ sự đáp lại nào
+
+Tình yêu cũng giúp chúng ta chấp nhận con người thật của nhau, bỏ qua những sai sót và sẵn sàng tha thứ cho nhau khi một trong hai gặp vấn đề khó khăn
+
+Yêu thương bản thân mình là khởi đầu của một mối tình trọn kiếp</pre>
+      </section>
+
+      <section id="Sự cố photto shop" class="story">
+        <h2>Sự cố photto shop</h2>
+        <div class="meta">Tệp: Sự cố photto shop.txt</div>
+        <pre class="content">Hôm nay, khi anh xuống văn phòng xem anh em đang chuẩn bị hồ sơ hợp đồng cho khách, bất ngờ khu vực máy photocopy phát ra một tiếng bụp lớn từ hộp cấp điện gần đó
+
+Cả văn phòng lập tức tối sầm lại, đèn chập chờn rồi tắt hẳn. Khói nhẹ bắt đầu bốc lên từ bảng điện khiến một số nhân viên hoảng hốt
+
+May mắn là đội kỹ thuật kịp thời chạy ra ngắt toàn bộ điện để tránh nguy cơ cháy nổ. Anh em nhanh chóng di chuyển ra ngoài để đảm bảo an toàn
+
+Khi sự cố tạm thời được khống chế, đội kỹ thuật kiểm tra và phát hiện nguyên nhân một đoạn dây điện trong hệ thống máy photocopy đã bị cũ, hở, chạm vào vỏ kim loại
+
+Thêm vào đó, độ ẩm cao trong những ngày mưa khiến nguy cơ chập điện càng lớn.
+
+Anh lập tức triệu tập đội kỹ thuật vào họp gấp
+
+Anh nhắc rõ: nhiệm vụ của bộ phận này là bảo trì, kiểm tra định kỳ để đảm bảo an toàn cho anh em văn phòng, vậy mà hôm nay lại để xảy ra tình trạng nghiêm trọng như thế
+
+Đây là tác phong thiếu cẩn trọng. Anh yêu cầu từng người đứng trước tập thể nhận lỗi, xin lỗi vì đã để anh em văn phòng hoang mang
+
+Sau đó, ngay trong ngày, phải khắc phục triệt để, không được phép để xảy ra thêm sự cố tương tự
+
+Anh cũng nói thẳng quan điểm
+
+Tôi không chấp nhận tình trạng này xảy ra lần thứ hai</pre>
+      </section>
+
+      <section id="Tập thể dục" class="story">
+        <h2>Tập thể dục</h2>
+        <div class="meta">Tệp: Tập thể dục.txt</div>
+        <pre class="content">Dẫn vào câu chuyện: Anh chuẩn bị đi chạy bộ, xem hôm nay có thể phá kỷ lục của mình được không. Lần trước anh chạy được 4km 
+Trước đây có lần anh đang chạy bộ thì gặp Long, hai người trò chuyện vài câu, anh ấy liếc qua rồi hỏi anh sức lực thế nào, chúng ta so tài một chút nhé? Câu này rõ ràng là khiêu khích mà? Dù sao cũng không thể chịu thua được, nhưng dù anh chạy thế nào thì Long luôn ở phía trước một đoạn, cảm giác như sắp đuổi kịp được, nhưng cuối cùng anh không thể tiếp tục, mồ hôi ướt đẫm cả áo, đôi chân thì run lên. Long chạy đến gần anh, hỏi anh: "Bình thường bạn chạy được bao xa?" Anh trả lời khoảng 3 km. Lúc đó (anh xxx) nói: "Hôm nay bạn đã chạy được gần 4 km rồi." Lúc đó anh mới nhận ra, thì ra anh ấy cố tình rèn luyện anh.
+Thực ra, việc nâng cao bản thân đôi khi cần có người giúp đỡ, nhưng bản 
+bản thân cũng phải kiên trì</pre>
+      </section>
+
+      <section id="Tình yêu la gi" class="story">
+        <h2>Tình yêu là gì</h2>
+        <div class="meta">Tệp: Tình yêu là gì.txt</div>
+        <pre class="content">Vì theo anh nghĩ tình yêu là nó xuất phát từ 2 phía 1 phần nữa là nếu mình yêu thương 1 ai đó thì mình cũng sẽ yêu luôn cái tính cách và thấu hiểu cho nhau đó mới là tình yêu
+
+Với anh nó đơn giản lắm chỉ cần mình cùng nhau cố gắng biết phấn đấu để nghĩ đến tương lai của 2 người
+
+Thật sự thời gian qua nói chuyện với em cũng không phải là thời gian dài. Nhưng anh cảm nhận được từ em những điều ấm áp lắm, em biết sẻ chia, thấu hiểu, em biết quan tâm.. không biết sự quan tâm mà em dành cho anh là dành cho một người bạn hay như thế nào. Nhưng những điều đơn giản như vậy thôi nó cũng làm cho anh vui, và mỗi ngày anh nghĩ về em, anh đều cảm thấy có động lực để làm việc, để cố gắng. 
+
+Tương lai anh không biết là mình sẽ như thế nào..
+
+
+Nhưng hiện tại, đối với anh, em là niềm vui, là niềm hạnh phúc của anh.
+
+Quá khứ của em đã từng trải qua tổn thương như thế nào, thì hiện tại, anh muốn bản thân anh sẽ là người bù đắp lại những tổn thương mà em đã từng phải gánh chịu..
+
+Anh luôn yêu thương em với vô điều kiện và anh luôn đặt tình cảm anh dành cho em đi đầu . Chắc chắn em là người anh yêu tiên mỗi bữa sáng nhưng anh sẽ cũng đặt em lên hàng đầu sau này anh và em về sống chung chúng ta có 1 nguồn kinh tế của 2 người anh không muốn người phụ nữ anh thương phải thua ai cả⚡️⚡️⚡️⚡️</pre>
+      </section>
+
+      <section id="TỔNG KẾT QUỸ PHÚC LỢI" class="story">
+        <h2>TỔNG KẾT QUỸ PHÚC LỢI</h2>
+        <div class="meta">Tệp: TỔNG KẾT QUỸ PHÚC LỢI.txt</div>
+        <pre class="content">TỔNG KẾT QUỸ PHÚC LỢI 
+
+Cuối năm luôn là thời điểm bận rộn nhất.
+Hôm nay, tôi dành trọn cả ngày để xem xét lại quỹ phúc lợi, rà soát toàn bộ các khoản hỗ trợ trong năm và thống kê những mục chi mà phòng ban Sun Group đã triển khai cho nhân viên.
+
+Đây không chỉ là việc kiểm kê số liệu hay quyết toán tài chính, mà còn là bước nền quan trọng để tôi và anh em xây dựng kế hoạch phúc lợi mới cho năm tới — sao cho quyền lợi của mọi người được đảm bảo, hợp lý và ngày càng tốt hơn.
+
+Trong lúc rà soát, chúng tôi đối chiếu từng chương trình: hỗ trợ khó khăn đột xuất, trợ cấp sinh nhật, du lịch, ốm đau, hiếu hỉ… Đồng thời lắng nghe ý kiến của anh em để xem mục nào cần bổ sung, mục nào nên điều chỉnh, và mục nào cần nâng cấp nhằm tạo động lực tinh thần cho đội ngũ.
+
+Bên cạnh đó, tôi cũng thống nhất với bộ phận tài chính về quỹ thưởng Tết, các phần quà cuối năm và những chính sách tri ân dành cho tập thể đã đồng hành suốt 12 tháng qua.
+Với tôi, phúc lợi không chỉ là con số — mà là cam kết về sự quan tâm, sự tôn trọng và môi trường làm việc mà Sun Group đang xây dựng.
+
+Song song, tôi cũng yêu cầu rà soát quy trình phê duyệt, đảm bảo mọi chính sách đều minh bạch, rõ ràng và đến đúng người, đúng thời điểm. Mọi khúc mắc trong năm phải được giải quyết dứt điểm để anh em yên tâm đón Tết.</pre>
+      </section>
+
+      <section id="traiqua" class="story">
+        <h2>TRẢI QUA THỜI GIAN</h2>
+        <div class="meta">Tệp: trải qua.txt</div>
+        <pre class="content">Ngần ấy thời gian anh cũng không biết là mình đi đến như thanh xuân như bây giờ là phải hoc và trải qua bao nhiêu thăng trầm nữa đó em.
+Nhưng đôi khi chúng ta bận rộn và vất vả một chút nhưng đổi lại là sự đủ đầy và con cái chúng ta sẽ vững vàng tương lai hơn thật nhiều.
+Ai cũng nói đàn ông thì lo toan sự nghiệp và to thuyền lớn sóng ở bên ngoài.
+Nhưng theo anh nghĩ thì mọi thứ nó cần hợp lý và tinh tế giữa xã hội này.
+Những việc nhỏ nhặt và bình thường nhất để gìn giữ một hạnh phúc thì đàn ông bọn anh cần và nên biết làm và làm một cách thật tốt để một người phụ nữ tin tưởng, cảm nhận được sự an toàn và trọn vẹn sự tin tưởng.</pre>
+      </section>
+
+      <section id="Tuấn vay 200 triệu" class="story">
+        <h2>Tuấn vay 200 triệu</h2>
+        <div class="meta">Tệp: Tuấn vay 200 triệu.txt</div>
+        <pre class="content">Không ai biết trước được điều gì sẽ xảy ra trong đời tai nạn hay bất ngờ
+
+Ngày hôm đó, Tuấn bạn thân của anh tìm đến và vay 200 triệu đồng
+
+Bố cậu ấy đột ngột bị đột quỵ, đang nằm trong phòng chăm sóc đặc biệt
+
+Chi phí điều trị quá lớn, chẳng mấy chốc đã cuốn sạch toàn bộ số tiền tiết kiệm của gia đình, mà vẫn còn thiếu nhiều
+
+Tuấn đã gõ cửa từng người họ hàng, vay mượn khắp nơi, nhưng vẫn không đủ
+
+Không còn cách nào khác, cậu ấy tìm đến tôi
+
+Tôi gọi phòng tài chính đưa tiền cho cậu ấy, nhưng cũng nhất quyết bảo viết một tờ giấy vay nợ, vì tôi nghĩ dù thân mấy thì tiền bạc cũng nên rạch ròi
+
+Tay cậu ấy run rẩy khi viết, miệng thì nói Anh Khánh, em sẽ trả lại cho anh sớm nhất có thể
+
+Anh chỉ vỗ vai bảo Tuấn quay lại chăm sóc bác trai, còn tiền bạc thì đừng quá lo
+
+Bởi lẽ, nếu lúc này tôi không giúp thì chúng tôi còn là bạn bè kiểu gì nữa?
+
+Thật ra, trong lòng tôi chẳng bao giờ quên, ngày xưa gia đình tôi nghèo khó, chính bố Tuấn và cả Tuấn đã nhiều lần giúp đỡ
+
+Hễ có gì ngon hay tốt, họ đều san sẻ cho nhà tôi
+
+Tôi còn nhớ có lần tôi sốt mê man, chính Tuấn đã bế tôi chạy đến phòng khám tình cảm đó, tôi coi như nghĩa tình ruột thịt
+
+Sau khi Tuấn rời đi, tôi cầm tờ giấy nợ, bỗng thấy nghẹn ngào</pre>
+      </section>
+
+      <section id="Ứng lương 3 lần" class="story">
+        <h2>Ứng lương 3 lần</h2>
+        <div class="meta">Tệp: Ứng lương 3 lần.txt</div>
+        <pre class="content">Hôm nay anh tới công ty anh nghe bên bộ phận kế toán báo cô tạp vụ tháng này ứng lương 3 lần rồi
+
+Nghe được tin ấy anh đã đi hỏi cô ấy và biết được hoàn cảnh éo le của cô ấy
+
+Chồng cô ấy nghiện ngập và cờ bạc, bố cô ấy mới bị tai nạn giờ phải nằm nằm liệt giường cần tiên thuốc thang
+
+Con cần tiền đóng học, cái tệ nhất là chồng của cô ấy đã không đỡ đần được gì cho cô ấy rồi còn suốt ngày bắt cô ấy đưa tiền cô ấy không thì lại đánh đập
+
+Nên đối với hoàn cảnh của cô ấy anh sẽ hỗ trợ hết mình trong phạm vi có thể em à vì cuộc sống của cô ấy không hè dễ dàng gì 1 thân con gái phải gánh vác cả gia đình</pre>
+      </section>
+
+      <section id="Uong ruou" class="story">
+        <h2>Uống rượu với khách hàng</h2>
+        <div class="meta">Tệp: Uống rượu với khách hàng.txt</div>
+        <pre class="content">Ở bên ngoài anh thấy một người đàn ông say rượu đang quát mắng một em gái, sau đó còn tát em ấy.
+Anh đoán họ là người yêu nhau, nhưng dù thế nào đi nữa, việc động tay động chân là không thể chấp nhận được.
+Đánh một em gái trước mặt nhiều người như vậy thật sự khiến anh không thể nhìn nổi.
+Anh ta còn định đánh tiếp.
+Ngay lúc đó anh lập tức xông lên, nắm lấy cánh tay hắn và nói:
+“Có chuyện gì thì nói chuyện tử tế, đừng động tay động chân đánh người.”
+Phụ nữ ngày nay đáng lẽ phải được tôn trọng, chứ không phải bị đánh hay mắng chửi.
+Hành động của người đàn ông đó làm anh thấy hắn chẳng ra con người, hành xử như kẻ điên.
+Sau khi người đàn ông ấy bỏ đi, anh mới biết họ là vợ chồng.
+Hóa ra anh ta đã nhiều lần đánh đập em ấy, chỉ vì em ấy luôn nhẫn nhịn chịu đựng.
+Nguyên do là sau khi kết hôn, người đàn ông dần chuyển toàn bộ tài sản sang tên mình.
+Nếu em ấy rời đi, bao nhiêu năm nỗ lực của em sẽ coi như đổ sông đổ bể.
+Vì vậy em ấy do dự và tiếp tục chịu đựng, bởi rời đi thì sẽ chẳng còn gì.
+Chuyện gia đình người khác anh không tiện can thiệp sâu thêm.
+Nhưng anh chỉ mong phụ nữ hãy học cách độc lập về kinh tế để tự bảo vệ mình.</pre>
+      </section>
+
+      <section id="VAN_DE_HON_NHAN" class="story">
+        <h2>VẤN ĐỀ VỀ HÔN NHÂN</h2>
+        <div class="meta">Tệp: VẤN ĐỀ HÔN NHÂN.txt</div>
+        <pre class="content">VẤN ĐỀ VỀ HÔN NHÂN 
+
+Lời nói độc hại chỉ khiến người thân yêu ngày càng xa cách. Vết thương cơ thể có thể chữa lành theo thời gian. Những tổn thương do lời nói không dễ thấy lại đâm thấu tim. Có thể đột ngột đánh gục một người,bạn phải hiểu rằng điều thực sự đưa một cuộc hôn nhân đến bờ vực đổ vỡ, thường không phải là hoàn cảnh gia đình mà là do những lời nói gây tổn hơn tích tụ theo năm tháng.
+
+GIA ĐÌNH CÃI VÃ. Gia đình chúng ta không phải là nơi sinh ra để cãi đúng hay sai, cũng không phải là chiến trường phân thắng bại. Yêu thương thì phải biết cách thể hiện. Miệng của cha mẹ chính là số phận của con cái.
+
+SỰ NGU DỐT. Sự ngu dốt nhất của một gia đình là khi con cái bên ngoài không bị thế giới đánh bại mà bị hủy hoại chính miệng của cha mẹ; nói chuyện tốt, giao tiếp tốt là phong thủy tốt nhất của Gia đình. Một gia đình đầy sự chỉ trích, trách móc, chì chiết lẫn nhau chắc chắn sẽ suy tàn. Còn một gia đình hòa thuận dù nghèo khó cũng sẽ phát đạt.
+
+GIA ĐÌNH HÒA THUẬN. Gia đình hòa thuận thì Phước lành phúc sẽ tự đến. Sự khích lệ, khen ngợi, động viên, tôn trọng,cổ vũ,của người yêu là động lực cho chúng ta bước tiếp không sợ hãi, Sự công nhận của cha mẹ là nền tảng để con cái vững bước trên đời.</pre>
+      </section>
+
+      <section id="vươnlen" class="story">
+        <h2>VƯƠN LÊN CHÍNH MÌNH</h2>
+        <div class="meta">Tệp: vươn lên chính mình.txt</div>
+        <pre class="content">Hãy nhớ kỹ: Dựa vào ai cũng không bằng dựa vào chính mình. Con người vốn phức tạp và dễ thay lòng đổi dạ, đời này không có bến tựa vĩnh viễn. Đừng đặt quá nhiều hy vọng vào người khác, ai cũng có nỗi khó riêng. Bạn phải trở thành núi tựa của đời mình. Những đoạn đường gian nan nhất, đều phải một mình bước đi. Tủi thân tự nuốt vào trong, áp lực tự mình gồng gánh, tổn thương cũng tự mình hàn gắn. Thật sự không ai thấu hiểu nỗi đau của ta, rốt cuộc mọi thứ vẫn phải tự mình đối mặt. Dù phía trước tối tăm mịt mù, dù quá trình đầy chông gai, bạn vẫn phải một mình đi đến ngọn hải đăng trong tim. Hãy không ngừng cứu lấy chính mình từ lửa đỏ nước sôi, từ vực sâu tuyệt vọng, bước ra nơi có ánh sáng. Từ giờ phút này, hoa thơm dành tặng cho bản thân, phi ngựa hát ca tiến về phương xa.</pre>
+      </section>
+
+      <!-- Many more sections could be added; include the rest of attachments similarly -->
+
+      <section id="Kiếm tiền" class="story">
+        <h2>Kiếm tiền</h2>
+        <div class="meta">Tệp: Kiếm tiền.txt</div>
+        <pre class="content">Biến cố bất ngờ trong gia đình nhân viên giúp em nhận ra tầm quan trọng của tiền bạc
+
+Vào lúc 1 giờ sáng hôm qua, anh nhận được một cuộc gọi từ em Nam, nhân viên đã làm việc ở công ty hơn 2 năm
+Công việc hằng ngày của em là làm theo những gì anh giao, không có nhiều tham vọng về thăng tiến hay kiếm tiền.
+Em luôn sống một cuộc sống bình lặng, đơn giản.
+Nhưng tối qua, em gọi cho anh, giọng run run nói rằng mẹ bị đột quỵ do bệnh tim, phải nhập viện và cần 200 triệu đồng tiền phẫu thuật.
+Em và vợ mỗi tháng chỉ kiếm đủ sống, chưa bao giờ tiết kiệm, cũng không có kế hoạch cho tương lai.
+... (nội dung dài hơn đã được rút gọn trong bản đính kèm)</pre>
+      </section>
+
+      <section id="Phần mềm hỏng" class="story">
+        <h2>Phần mềm hỏng</h2>
+        <div class="meta">Tệp: Phần mềm hỏng.txt</div>
+        <pre class="content">Hôm nay không biết vì sao mà hệ thống phần mềm quản lý dự án của văn phòng bỗng dưng gặp sự cố.
+Buổi sáng mọi thứ vẫn vận hành bình thường, nhưng đến trưa, sau giờ ăn cơm, khi mở lại thì toàn bộ dữ liệu bị treo, không thể truy cập.
+... (xem file gốc để biết chi tiết)</pre>
+      </section>
+
+      <section id="Rong luong" class="story">
+        <h2>Rộng lượng</h2>
+        <div class="meta">Tệp: Rộng lượng.txt</div>
+        <pre class="content">Sáng nay có xảy ra chút chuyện..
+Sáng anh lái xe đi mua đồ ăn sáng. Vì có chút vội, anh đậu xe bên lề đường, nghĩ là vào rồi ra ngay, chắc không có vấn đề gì. Nhưng không ngờ, chỉ trong vài phút ngắn ngủi, sự việc đã xảy ra.
+Lúc đó, anh nghe thấy một tiếng động rất lớn từ phía sau: "Bum!"
+... (chi tiết câu chuyện và cách anh xử lý)</pre>
+      </section>
+
+      <section id="empty-files" class="story">
+        <h2>Tệp rỗng / chưa có nội dung</h2>
+        <div class="meta">Các tệp: HỎi THĂM MẸ VỢ.txt, KỈ LUẬT BẢN THÂN.txt, SÁCH RICH DAD.txt</div>
+        <pre class="content">Một số file đính kèm hiện tại trống; nếu bạn muốn, tôi có thể chèn nội dung khi bạn cập nhật các file đó.</pre>
+      </section>
+
+    </main>
+
+    </div>
+
+    <footer style="margin-top:18px;color:var(--muted)">
+      <div>Gợi ý: bạn đang dùng Live Server — nếu nội dung không hiển thị đầy đủ, bấm "Tải lại nội dung".</div>
+    </footer>
+  </div>
+
+  <script>
+    // Try to load `stories/index.json`; fallback to embedded array
+    let filenames = [];
+    const fallback = [
+      "39 câu chuyện thường ngày.txt","Ai cũng mưu cầu hạnh phúc.txt","Bản thân stress.txt","bữa ăn cùng nhân viên.txt",
+      "Cha tốt hiếu thảo.txt","chào hẹn hò.txt","Con buồn.txt","Con bị cô giáo gọi điện.txt","Con ốm.txt",
+      "Có khách hàng.txt","Cầu lông.txt","Em tự ti quá.txt","Giúp đỡ hàng xóm.txt","HỎi THĂM MẸ VỢ.txt",
+      "Kiếm tiền 2.txt","Kiếm tiền.txt","Kiểm tra hợp đồng.txt","KỈ LUẬT BẢN THÂN.txt","Lắp đặt hệ thống.txt",
+      "nhân viên cũ.txt","nhân viên quà quê.txt","Năng lực 1.txt","Năng lực 2.txt","Phần mềm hỏng.txt",
+      "Phụ nữ li hôn.txt","PHỤ NỮ TỰ CHỦ.txt","Rộng lượng.txt","Sau này.txt","SÁCH RICH DAD.txt",
+      "Sự cố photto shop.txt","trải qua.txt","Tuấn vay 200 triệu.txt","Tình yêu là gì.txt","Tập thể dục.txt",
+      "TỔNG KẾT QUỸ PHÚC LỢI.txt","TỪ THIỆN.txt","Uống rượu với khách hàng.txt","vươn lên chính mình.txt",
+      "VẤN ĐỀ HÔN NHÂN.txt","ĐA DẠNG HÓA NGUỒN THU.txt","Đau răng.txt","Đào tạo quản lý.txt","Đưa con đi chơi.txt",
+      "Đầu tư 1.txt","Đầu tư 2.txt","Ở lại cùng nhân viên.txt","Ứng lương 3 lần.txt"
+    ];
+
+    const toc = document.getElementById('toc');
+    const main = document.getElementById('stories');
+    const manageBtn = document.getElementById('manageBtn');
+    const manager = document.getElementById('manager');
+    const manageList = document.getElementById('manageList');
+
+    async function loadIndex(){
+      try{
+        const resp = await fetch('stories/index.json', {cache: 'no-store'});
+        if(resp.ok){ filenames = await resp.json(); return; }
+      }catch(e){ /* ignore */ }
+      filenames = fallback.slice();
+    }
+
+    // slugify for ids
+    function slugify(s){
+      return s.replace(/[^a-z0-9]+/gi,'-').replace(/^-+|-+$/g,'').toLowerCase();
+    }
+
+    // Build sections dynamically and fetch files from stories/
+    async function build(){
+      main.innerHTML='';
+      toc.innerHTML='';
+      for(const name of filenames){
+        const id = slugify(name);
+        const a = document.createElement('a'); a.href = '#'+id; a.textContent = name.replace(/\.txt$/i,''); toc.appendChild(a);
+
+        const sec = document.createElement('section'); sec.className='story'; sec.id = id;
+        const h2 = document.createElement('h2'); h2.textContent = name.replace(/\.txt$/i,'');
+        const meta = document.createElement('div'); meta.className='meta'; meta.textContent = 'Tệp: ' + name;
+        const openLink = document.createElement('a'); openLink.className='small-link'; openLink.textContent='Bấm vào đây đi xin 10k ';
+        openLink.href = 'stories/' + encodeURIComponent(name);
+        openLink.target = '_blank';
+        openLink.rel = 'noopener noreferrer';
+        meta.appendChild(openLink);
+
+        sec.appendChild(h2); sec.appendChild(meta);
+        const pre = document.createElement('pre'); pre.className='content'; pre.textContent='Đang tải...';
+        sec.appendChild(pre);
+
+        const back = document.createElement('div'); back.innerHTML = '<a class="back-top">↑ Lên đầu</a>';
+        back.querySelector('.back-top').addEventListener('click', ()=> window.scrollTo({top:0,behavior:'smooth'}));
+        sec.appendChild(back);
+
+        main.appendChild(sec);
+
+        // Try fetch with encoded name then fallback
+        try{
+          let resp = await fetch('stories/' + encodeURIComponent(name));
+          if(!resp.ok) resp = await fetch('stories/' + name);
+          if(resp.ok){
+            const text = await resp.text();
+            pre.textContent = text || '(File rỗng)';
+          } else {
+            pre.textContent = '(Không tìm thấy bản sao trong stories/)';
+          }
+        }catch(e){
+          try{ const resp2 = await fetch('stories/' + name); if(resp2.ok){ pre.textContent = await resp2.text() || '(File rỗng)'; } else pre.textContent='(Không thể tải file)'; }catch(_){ pre.textContent='(Lỗi khi tải)'; }
+        }
+      }
+    }
+
+    // Management UI
+    function renderManageList(){
+      manageList.innerHTML = '';
+      filenames.forEach((name, idx)=>{
+        const el = document.createElement('div');
+        el.style.display='flex'; el.style.alignItems='center'; el.style.gap='8px'; el.style.padding='4px';
+        const cb = document.createElement('input'); cb.type='checkbox'; cb.dataset.name = name;
+        const span = document.createElement('span'); span.textContent = name; span.style.color='var(--muted)';
+        el.appendChild(cb); el.appendChild(span);
+        manageList.appendChild(el);
+      });
+    }
+
+    // Download helper
+    function downloadBlob(filename, content, type='application/json'){
+      const blob = new Blob([content], {type});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+
+    // Wire manager buttons
+    manageBtn.addEventListener('click', ()=>{ manager.style.display = manager.style.display === 'none' ? 'block' : 'none'; renderManageList(); });
+    document.getElementById('downloadIndex').addEventListener('click', ()=>{ downloadBlob('index.json', JSON.stringify(filenames, null, 2), 'application/json'); });
+
+    document.getElementById('addFileBtn').addEventListener('click', ()=>{
+      const fileInput = document.getElementById('fileUpload');
+      const nameInput = document.getElementById('newName').value.trim();
+      if(fileInput.files.length > 0){
+        const f = fileInput.files[0];
+        const reader = new FileReader();
+        reader.onload = ()=>{
+          // Offer download using original filename or provided name
+          const outName = nameInput || f.name;
+          downloadBlob(outName, reader.result, 'text/plain;charset=utf-8');
+          alert('Đã tạo file. Vui lòng sao chép file này vào thư mục stories/ hoặc chạy scripts\\manage_stories.ps1 -AddPath <đường dẫn>');
+        };
+        reader.readAsText(f, 'utf-8');
+      } else if(nameInput){
+        // Create empty file with name
+        downloadBlob(nameInput, '', 'text/plain;charset=utf-8');
+        alert('Đã tạo file rỗng. Hãy lưu vào `stories/` hoặc chạy scripts\\manage_stories.ps1 -AddPath <đường dẫn>');
+      } else {
+        alert('Vui lòng chọn file .txt hoặc nhập tên file mới.');
+      }
+    });
+
+    document.getElementById('removeSelected').addEventListener('click', ()=>{
+      const checked = Array.from(manageList.querySelectorAll('input[type=checkbox]:checked')).map(i=>i.dataset.name);
+      if(checked.length === 0){ alert('Chọn mục cần xóa.'); return; }
+      if(!confirm('Xác nhận xóa ' + checked.length + ' mục khỏi index (chỉ cập nhật index, không xóa file vật lý).')) return;
+      filenames = filenames.filter(n=> !checked.includes(n));
+      renderManageList();
+      downloadBlob('index.json', JSON.stringify(filenames, null, 2), 'application/json');
+      alert('Đã tạo index.json cập nhật. Để áp dụng trên đĩa, thay thế stories/index.json hoặc chạy scripts\\manage_stories.ps1 -RebuildIndex từ PowerShell.');
+      build();
+    });
+
+    document.getElementById('rebuildIndex').addEventListener('click', ()=>{
+      alert('Để xây lại index từ thư mục stories/ trên máy, hãy chạy trong PowerShell:\n.\\scripts\\manage_stories.ps1 -RebuildIndex\nSau đó bấm "Tải lại nội dung" (Reload) để làm mới trang.');
+    });
+
+    // Show only one section (no scrolling)
+    function showOnly(id){
+      document.querySelectorAll('main section.story').forEach(s=>{
+        if(s.id === id){ s.classList.remove('hidden'); s.classList.add('focused'); }
+        else { s.classList.add('hidden'); s.classList.remove('focused'); }
+      });
+      // highlight the corresponding toc link
+      document.querySelectorAll('#toc a').forEach(a=>{ a.style.fontWeight = (a.getAttribute('href') === '#'+id) ? '600' : '400'; });
+    }
+
+    function showAll(){
+      document.querySelectorAll('main section.story').forEach(s=>{ s.classList.remove('hidden'); s.classList.remove('focused'); });
+      document.querySelectorAll('#toc a').forEach(a=>{ a.style.fontWeight = '400'; });
+    }
+
+    // intercept TOC clicks to show only that story (prevent default scrolling)
+    toc.addEventListener('click', (e)=>{
+      const a = e.target.closest('a');
+      if(!a) return;
+      e.preventDefault();
+      const href = a.getAttribute('href') || '';
+      if(href.startsWith('#')){
+        const id = href.slice(1);
+        showOnly(id);
+      }
+    });
+
+    // Build initial
+    (async ()=>{ await loadIndex(); renderManageList(); await build(); })();
+
+    // Search/filter
+    const q = document.getElementById('q');
+    function applyFilter(){
+      const v = q.value.trim().toLowerCase();
+      document.querySelectorAll('main section.story').forEach(s=>{
+        const title = s.querySelector('h2').textContent.toLowerCase();
+        const body = s.querySelector('.content').textContent.toLowerCase();
+        s.style.display = (v === '' || title.includes(v) || body.includes(v)) ? '' : 'none';
+      });
+    }
+    q.addEventListener('input', applyFilter);
+
+    // Buttons
+    document.getElementById('clear').addEventListener('click', ()=>{ q.value=''; applyFilter(); q.focus(); });
+    document.getElementById('reload').addEventListener('click', async ()=>{ await loadIndex(); await build(); renderManageList(); });
+
+    // keyboard: / focuses search
+    document.addEventListener('keydown', (e)=>{ if(e.key === '/' && document.activeElement !== q){ e.preventDefault(); q.focus(); } });
+
+  </script>
+</body>
+</html>

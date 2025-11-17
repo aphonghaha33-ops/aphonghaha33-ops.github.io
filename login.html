@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập (Đã loại bỏ)</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #111; color: #fff; display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0 }
+        .notice { background: rgba(255,255,255,0.04); padding:30px;border-radius:12px; text-align:center; max-width:600px; box-shadow: 0 10px 40px rgba(0,0,0,0.6) }
+        .notice h1{ font-size:22px; margin-bottom:10px }
+        .notice p{ color:#cfcfcf; margin-bottom:18px }
+        .notice a{ display:inline-block;padding:10px 18px;border-radius:8px;background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; text-decoration:none }
+    </style>
+</head>
+<body>
+    <div class="notice">
+        <h1>Trang đăng nhập đã bị gỡ bỏ</h1>
+        <p>Để truy cập kho câu chuyện, bạn sẽ được chuyển hướng tới trang tham khảo (index).</p>
+        <a href="index.html">Đi tới Trang Tham Khảo</a>
+    </div>
+    <script>
+        // Auto-redirect after short delay
+        setTimeout(() => { window.location.href = 'index.html'; }, 900);
+    </script>
+</body>
+</html>
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .social-btn:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+        }
+
+        .signup-link {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .signup-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        .signup-link a:hover {
+            color: #764ba2;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .form-section.hidden {
+            display: none;
+        }
+
+        .toggle-form {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .toggle-form a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .toggle-form a:hover {
+            color: #764ba2;
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            height: 4px;
+            background: #e8e8e8;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s, background-color 0.3s;
+            background: #ccc;
+        }
+
+        .password-strength-bar.weak {
+            width: 33%;
+            background: #f44;
+        }
+
+        .password-strength-bar.medium {
+            width: 66%;
+            background: #fb3;
+        }
+
+        .password-strength-bar.strong {
+            width: 100%;
+            background: #4f4;
+        }
+
+        .strength-text {
+            font-size: 12px;
+            margin-top: 5px;
+            color: #999;
+        }
+
+        .strength-text.weak {
+            color: #f44;
+        }
+
+        .strength-text.medium {
+            color: #fb3;
+        }
+
+        .strength-text.strong {
+            color: #4f4;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-message {
+            display: none;
+            padding: 12px 15px;
+            background: #fee;
+            border-left: 4px solid #f44;
+            border-radius: 4px;
+            color: #c33;
+            font-size: 13px;
+            margin-bottom: 20px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .success-message {
+            display: none;
+            padding: 12px 15px;
+            background: #efe;
+            border-left: 4px solid #4f4;
+            border-radius: 4px;
+            color: #3c3;
+            font-size: 13px;
+            margin-bottom: 20px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 30px 20px;
+            }
+
+            .login-title {
+                font-size: 24px;
+            }
+
+            .logo-icon {
+                font-size: 48px;
+            }
+
+            .remember-forgot {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .social-login {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo-section">
+                <div class="logo-icon">📚</div>
+                <h1 class="login-title">Kho Câu Chuyện</h1>
+                <p class="login-subtitle">Đăng nhập để truy cập nội dung</p>
+            </div>
+
+            <div id="errorMessage" class="error-message"></div>
+            <div id="successMessage" class="success-message"></div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="form-section active" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="email">Email hoặc Tên Đăng Nhập</label>
+                    <input 
+                        type="text" 
+                        id="email" 
+                        name="email" 
+                        placeholder="Nhập email hoặc tên đăng nhập"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mật Khẩu</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="Nhập mật khẩu"
+                        required
+                    >
+                </div>
+
+                <div class="remember-forgot">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Nhớ mật khẩu</label>
+                    </div>
+                    <a href="#" class="forgot-password">Quên mật khẩu?</a>
+                </div>
+
+                <button type="submit" class="btn-login">Đăng Nhập</button>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="signupForm" class="form-section" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label for="signup-name">Họ và Tên</label>
+                    <input 
+                        type="text" 
+                        id="signup-name" 
+                        name="name" 
+                        placeholder="Nhập họ và tên"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-email">Email hoặc Username</label>
+                    <input 
+                        type="text" 
+                        id="signup-email" 
+                        name="email" 
+                        placeholder="Nhập email hoặc username"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-password">Mật Khẩu</label>
+                    <input 
+                        type="password" 
+                        id="signup-password" 
+                        name="password" 
+                        placeholder="Tối thiểu 8 ký tự"
+                        required
+                        oninput="checkPasswordStrength(this.value)"
+                    >
+                    <div class="password-strength">
+                        <div id="passwordStrengthBar" class="password-strength-bar"></div>
+                    </div>
+                    <div id="strengthText" class="strength-text">Mật khẩu yếu</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-confirm">Xác Nhận Mật Khẩu</label>
+                    <input 
+                        type="password" 
+                        id="signup-confirm" 
+                        name="confirm" 
+                        placeholder="Nhập lại mật khẩu"
+                        required
+                    >
+                </div>
+
+                <div class="form-group remember-me" style="margin-bottom: 25px;">
+                    <input type="checkbox" id="agree-terms" name="agree" required>
+                    <label for="agree-terms">Tôi đồng ý với <a href="#" style="color: #667eea;">Điều khoản dịch vụ</a></label>
+                </div>
+
+                <button type="button" class="btn-login" onclick="submitSignup()">Đăng Ký</button>
+            </form>
+
+            <div class="divider">
+                <span>HOẶC</span>
+            </div>
+
+            <div class="social-login">
+                <button type="button" class="social-btn" onclick="socialLogin('google')">
+                    <span>🔵</span> Google
+                </button>
+                <button type="button" class="social-btn" onclick="socialLogin('facebook')">
+                    <span>📘</span> Facebook
+                </button>
+            </div>
+
+            <p class="signup-link" id="toggleText">
+                Chưa có tài khoản? <a onclick="toggleForm()">Đăng ký ngay</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const remember = document.getElementById('remember').checked;
+            const errorMsg = document.getElementById('errorMessage');
+            const successMsg = document.getElementById('successMessage');
+
+            // Reset messages
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+
+            // Validation
+            if (!email || !password) {
+                errorMsg.textContent = 'Vui lòng điền đầy đủ email và mật khẩu';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            if (email.includes('@') && password.length < 6) {
+                errorMsg.textContent = 'Mật khẩu phải có ít nhất 6 ký tự';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            // Demo login (in production, this would connect to a backend)
+            if (email === 'demo@example.com' && password === '123456') {
+                if (remember) {
+                    localStorage.setItem('userEmail', email);
+                }
+                
+                successMsg.textContent = '✓ Đăng nhập thành công! Đang chuyển hướng...';
+                successMsg.style.display = 'block';
+
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            } else {
+                errorMsg.textContent = 'Email hoặc mật khẩu không chính xác. Demo: demo@example.com / 123456';
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value.trim();
+            const confirm = document.getElementById('signup-confirm').value.trim();
+            const agreeTerms = document.getElementById('agree-terms').checked;
+            const errorMsg = document.getElementById('errorMessage');
+            const successMsg = document.getElementById('successMessage');
+
+            // Reset messages
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+
+            // Validation
+            if (!name || !email || !password || !confirm) {
+                errorMsg.textContent = 'Vui lòng điền đầy đủ tất cả các trường';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            // Accept both email and username format
+            const isValidEmail = email.includes('@') && email.includes('.');
+            const isValidUsername = email.startsWith('@') || !email.includes('@');
+            
+            if (!isValidEmail && !isValidUsername) {
+                errorMsg.textContent = 'Email hoặc username không hợp lệ';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            if (password.length < 8) {
+                errorMsg.textContent = 'Mật khẩu phải có ít nhất 8 ký tự';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            if (password !== confirm) {
+                errorMsg.textContent = 'Mật khẩu xác nhận không khớp';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            if (!agreeTerms) {
+                errorMsg.textContent = 'Vui lòng đồng ý với Điều khoản dịch vụ';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            // Success - redirect to username page
+            successMsg.textContent = '✓ Đăng ký thành công! Đang chuyển hướng...';
+            successMsg.style.display = 'block';
+
+            setTimeout(() => {
+                window.location.href = 'username.html';
+            }, 1500);
+        }
+
+        function submitSignup() {
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value.trim();
+            const confirm = document.getElementById('signup-confirm').value.trim();
+            const agreeTerms = document.getElementById('agree-terms').checked;
+            const errorMsg = document.getElementById('errorMessage');
+            const successMsg = document.getElementById('successMessage');
+
+            // Reset messages
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+
+            // Validation
+            if (!name || !email || !password || !confirm) {
+                errorMsg.textContent = 'Vui lòng điền đầy đủ tất cả các trường';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            // Accept both email and username format
+            const isValidEmail = email.includes('@') && email.includes('.');
+            const isValidUsername = email.startsWith('@') || !email.includes('@');
+            
+            if (!isValidEmail && !isValidUsername) {
+                errorMsg.textContent = 'Email hoặc username không hợp lệ';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            if (password.length < 8) {
+                errorMsg.textContent = 'Mật khẩu phải có ít nhất 8 ký tự';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            if (password !== confirm) {
+                errorMsg.textContent = 'Mật khẩu xác nhận không khớp';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            if (!agreeTerms) {
+                errorMsg.textContent = 'Vui lòng đồng ý với Điều khoản dịch vụ';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            // Success - show message and redirect
+            successMsg.textContent = '✓ Đăng ký thành công! Đang chuyển hướng...';
+            successMsg.style.display = 'block';
+            
+            // Redirect after 1 second
+            setTimeout(function() {
+                window.location.href = 'username.html';
+            }, 1000);
+        }
+
+        function toggleForm() {
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            const toggleText = document.getElementById('toggleText');
+            const loginTitle = document.querySelector('.login-title');
+            const loginSubtitle = document.querySelector('.login-subtitle');
+            const signupEmail = document.getElementById('signup-email');
+
+            loginForm.classList.toggle('active');
+            loginForm.classList.toggle('hidden');
+            signupForm.classList.toggle('active');
+            signupForm.classList.toggle('hidden');
+
+            if (loginForm.classList.contains('active')) {
+                loginTitle.textContent = 'Kho Câu Chuyện';
+                loginSubtitle.textContent = 'Đăng nhập để truy cập nội dung';
+                toggleText.innerHTML = 'Chưa có tài khoản? <a onclick="toggleForm()">Đăng ký ngay</a>';
+            } else {
+                loginTitle.textContent = 'Tạo Tài Khoản';
+                loginSubtitle.textContent = 'Tham gia cùng chúng tôi';
+                toggleText.innerHTML = 'Đã có tài khoản? <a onclick="toggleForm()">Đăng nhập ngay</a>';
+                // Auto-fill email with the special username
+                signupEmail.value = '@NGUOITAIKHONGDOANHTHU3';
+                signupEmail.focus();
+            }
+        }
+
+        function checkPasswordStrength(password) {
+            const strengthBar = document.getElementById('passwordStrengthBar');
+            const strengthText = document.getElementById('strengthText');
+            
+            let strength = 0;
+            
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+            strengthBar.className = 'password-strength-bar';
+            
+            if (strength === 0) {
+                strengthBar.classList.add('weak');
+                strengthText.textContent = 'Mật khẩu yếu';
+                strengthText.className = 'strength-text weak';
+            } else if (strength <= 2) {
+                strengthBar.classList.add('weak');
+                strengthText.textContent = 'Mật khẩu yếu';
+                strengthText.className = 'strength-text weak';
+            } else if (strength === 3) {
+                strengthBar.classList.add('medium');
+                strengthText.textContent = 'Mật khẩu trung bình';
+                strengthText.className = 'strength-text medium';
+            } else {
+                strengthBar.classList.add('strong');
+                strengthText.textContent = 'Mật khẩu mạnh';
+                strengthText.className = 'strength-text strong';
+            }
+        }
+
+        function socialLogin(provider) {
+            alert(`Đăng nhập qua ${provider === 'google' ? 'Google' : 'Facebook'} (Demo)`);
+            console.log(`Social login with ${provider}`);
+        }
+
+        // Load saved email if available
+        window.addEventListener('load', function() {
+            const savedEmail = localStorage.getItem('userEmail');
+            if (savedEmail) {
+                document.getElementById('email').value = savedEmail;
+                document.getElementById('remember').checked = true;
+            }
+        });
+
+        // Enter key to submit
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        });
+
+        document.getElementById('signup-confirm').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('signupForm').dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+</html>

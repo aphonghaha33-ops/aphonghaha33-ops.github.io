@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Danh sách câu chuyện</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;margin:20px;background:#f7fafc;color:#0f1724}
+    .wrap{max-width:980px;margin:0 auto;background:#fff;padding:20px;border-radius:8px;box-shadow:0 6px 24px rgba(2,6,23,0.08)}
+    h1{margin:0 0 8px}
+    p.small{color:#475569;margin-top:0}
+    ul{padding-left:18px}
+    li{margin:8px 0}
+    a.link{color:#0366d6;text-decoration:none}
+    button{background:#2563eb;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer}
+    pre{background:#111827;color:#f8fafc;padding:12px;border-radius:6px;overflow:auto;max-height:360px}
+    .notice{color:#6b7280;font-size:14px}
+    .file-block{margin-top:12px;padding:12px;border-radius:6px;border:1px solid #e6eef8}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Danh sách câu chuyện</h1>
+    <p class="small">Nhấn link để mở file gốc trên Desktop, hoặc nhấn <strong>Load workspace copies</strong> để hiển thị nội dung nếu bạn đã sao chép các .txt vào thư mục <code>stories/</code> trong workspace.</p>
+
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+      <button id="loadCopies">Load workspace copies</button>
+      <span class="notice">(Sao chép: <code>Copy-Item 'C:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\*.txt' -Destination 'C:\\Users\\aa\\Downloads\\web\\stories' -Force</code>)</span>
+    </div>
+
+    <ul id="list"></ul>
+
+    <div id="output"></div>
+  </div>
+
+  <script>
+    // Các đường dẫn file mà bạn đã cung cấp (Windows paths)
+    const paths = [
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\SÁCH RICH DAD.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Sau này.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Sự cố photto shop.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Tập thể dục.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Tình yêu là gì.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\TỔNG KẾT QUỸ PHÚC LỢI.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\trải qua.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\TỪ THIỆN.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Tuấn vay 200 triệu.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Ứng lương 3 lần.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Uống rượu với khách hàng.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\VẤN ĐỀ HÔN NHÂN.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\vươn lên chính mình.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\39 câu chuyện thường ngày.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Ai cũng mưu cầu hạnh phúc.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Bản thân stress.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\bữa ăn cùng nhân viên.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Cầu lông.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Cha tốt hiếu thảo.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\chào hẹn hò.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Có khách hàng.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Con bị cô giáo gọi điện.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Con buồn.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Con ốm.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\ĐA DẠNG HÓA NGUỒN THU.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Đào tạo quản lý.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Đau răng.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Đầu tư 1.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Đầu tư 2.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Đưa con đi chơi.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Em tự ti quá.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Giúp đỡ hàng xóm.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\HỎi THĂM MẸ VỢ.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\KỈ LUẬT BẢN THÂN.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Kiếm tiền 2.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Kiếm tiền.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Kiểm tra hợp đồng.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Lắp đặt hệ thống.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Năng lực 1.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Năng lực 2.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\nhân viên cũ.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\nhân viên quà quê.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Ở lại cùng nhân viên.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Phần mềm hỏng.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Phụ nữ li hôn.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\PHỤ NỮ TỰ CHỦ.txt",
+      "c:\\Users\\aa\\Desktop\\CÂU CHUYỆN\\Rộng lượng.txt"
+    ];
+
+    const listEl = document.getElementById('list');
+    paths.forEach(p=>{
+      const li = document.createElement('li');
+      // create a file:/// link that opens the original file on Desktop
+      const href = encodeURI('file:///' + p.replace(/\\\\/g,'/'));
+      const a = document.createElement('a');
+      a.href = href;
+      a.target = '_blank';
+      a.rel = 'noreferrer noopener';
+      a.textContent = p.split('\\\\').pop();
+      a.className = 'link';
+      li.appendChild(a);
+      // also add a small hint about loading from workspace copy
+      const hint = document.createElement('span');
+      hint.style.marginLeft = '8px';
+      hint.style.color = '#6b7280';
+      const filename = p.split('\\\\').pop();
+      const localHref = 'stories/' + filename;
+      const loadBtn = document.createElement('button');
+      loadBtn.textContent = 'Preview copy';
+      loadBtn.style.padding = '4px 8px';
+      loadBtn.style.fontSize = '13px';
+      loadBtn.style.marginLeft = '8px';
+      loadBtn.addEventListener('click', ()=>{
+        showLocalFile(localHref, filename);
+      });
+      li.appendChild(loadBtn);
+      listEl.appendChild(li);
+    });
+
+    function showLocalFile(relativePath, filename){
+      const out = document.getElementById('output');
+      out.innerHTML = '';
+      const block = document.createElement('div');
+      block.className = 'file-block';
+      const title = document.createElement('div');
+      title.style.fontWeight = '600';
+      title.textContent = filename;
+      block.appendChild(title);
+      const pre = document.createElement('pre');
+      pre.textContent = 'Đang tải...';
+      block.appendChild(pre);
+      out.appendChild(block);
+
+      fetch(relativePath).then(r=>{
+        if(!r.ok) throw new Error('Không thể tải (HTTP ' + r.status + ')');
+        return r.text();
+      }).then(text=>{
+        pre.textContent = text;
+      }).catch(err=>{
+        pre.textContent = 'Không tìm thấy file tại ' + relativePath + "\n\nGợi ý: hãy sao chép các .txt vào thư mục 'stories' trong workspace rồi bấm lại.\n\nLỗi: " + err.message;
+      });
+    }
+
+    // Load workspace copies button: try to fetch all files and show counts
+    document.getElementById('loadCopies').addEventListener('click', async ()=>{
+      const out = document.getElementById('output');
+      out.innerHTML = '';
+      const header = document.createElement('div'); header.style.marginBottom='8px'; header.textContent='Kết quả tải:'; out.appendChild(header);
+      for(const p of paths){
+        const filename = p.split('\\\\').pop();
+        const relative = 'stories/' + filename;
+        const div = document.createElement('div'); div.style.marginBottom='6px';
+        try{
+          const r = await fetch(relative);
+          if(!r.ok) throw new Error('HTTP ' + r.status);
+          const text = await r.text();
+          const item = document.createElement('div'); item.textContent = filename + ' — OK (' + Math.min(120, text.length) + ' chars)'; item.style.color='#16a34a';
+          div.appendChild(item);
+        }catch(e){
+          const item = document.createElement('div'); item.textContent = filename + ' — Không tìm thấy'; item.style.color='#ef4444';
+          div.appendChild(item);
+        }
+        out.appendChild(div);
+      }
+    });
+  </script>
+</body>
+</html>
